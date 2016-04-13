@@ -1,0 +1,28 @@
+#
+#   File .htaccess
+#   Rewrite module configuration 
+#   Niuware WebFramework
+#
+
+Options +FollowSymLinks
+Options -Indexes
+IndexIgnore */*
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^.*(\bstyles\b).*$ - [L]
+    RewriteRule ^.*(\bjs\b).*$ - [L]
+    RewriteRule ^.*(\bassets\b).*$ - [L]
+    RewriteRule ^(.+)\/{0,1}$ index.php [L]
+    RewriteRule ^(.+)[\/]*$ index.php [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . index.php
+</IfModule>
+
+#
+#   End of
+#   Niuware WebFramework
+#

@@ -1,0 +1,8 @@
+/* Default CSS file */
+html, body {
+    font-size: 12pt;
+} 
+h1 {
+    font-size: 22pt;
+    color: #333;
+}

@@ -1,0 +1,15 @@
+{
+    "name": "niuware-webframework",
+    "version": "0.0.1",
+    "scripts": {
+		"preinstall": "npm install typings"
+    },
+    "license": "Apache-2.0",
+    "dependencies": {
+    },
+    "devDependencies": {
+        "typescript": "^1.8.9",
+		"typings": "^0.7.9",
+		"nwf-js":"^1.0.11"
+    }
+}
