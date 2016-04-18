@@ -1,7 +1,17 @@
 <?php 
 
+/**
+* This class is part of the core of Niuware WebFramework 
+* and is not particularly intended to be modified.
+* For information about the license please visit the 
+* GIT repository at:
+* https://github.com/niuware/web-framework
+*/
 namespace Niuware\WebFramework {
     
+    /**
+    * Executes an API call
+    */
     final class Api {
         
         private $error;
@@ -13,12 +23,16 @@ namespace Niuware\WebFramework {
         private $params = array();
         
         function __construct() {
-             
+            
+            // Default values
             $this->error = true;
             $this->errCode = "0x201";
             $this->exitFail = false;
         }
         
+        /**
+        * Calls all necessary methods to execute the api call
+        */
         private function start() {
 
             $this->load();
@@ -28,12 +42,18 @@ namespace Niuware\WebFramework {
             $this->response();
         }
         
+        /**
+        * Register the class autoloaders for an api call
+        */
         private function load() {
             
             spl_autoload_register(__NAMESPACE__ . "\Autoloader::api");
             spl_autoload_register(__NAMESPACE__ . "\Autoloader::model");
         }
         
+        /**
+        * Sends back a response if an error was generated
+        */
         private function response() {
             
             if ($this->error) {
@@ -43,6 +63,10 @@ namespace Niuware\WebFramework {
             }
         }
         
+        /**
+        * Instanciate an object of the desired API class and
+        * executes the called method
+        */
         private function execute() {
 
             if (class_exists($this->className)) {
@@ -64,6 +88,11 @@ namespace Niuware\WebFramework {
             }
         }
         
+        /**
+        * Parses the request URL
+        * @param string $customPath The path to parse
+        * @return array Splitted URL
+        */
         private function actionPath($customPath = "") {
             
             $currentPath = $customPath;
@@ -82,12 +111,12 @@ namespace Niuware\WebFramework {
 
         /**
          * Executes a POST API call
-         * @param   string  $task   Name of the task to execute
-         * @param   array   $params Task function arguments
+         * @param string $apiCall Name of the method to execute
+         * @param array $params Method arguments
          */
-        public function postApi($task, $params) {
+        public function postApi($apiCall, $params) {
 
-            $func = explode("/", $task);
+            $func = explode("/", $apiCall);
                     
             $this->className = "Niuware\WebFramework\Api\\" . $func[0];
             $this->classFile = $func[1];
@@ -97,20 +126,10 @@ namespace Niuware\WebFramework {
             $this->start();
         }
         
-        public function postApiDirect($params) {
-            
-            $func = $this->actionPath();
-
-            $this->className = "Niuware\WebFramework\Api\\" . $func[1];
-            $this->classFile = $func[1];
-            $this->methodName = "post" . $func[2];
-            
-            $this->params = $params;
-            
-            $this->start();
-        }
-        
-        public function getRequest() {
+        /**
+         * Executes a GET API call
+         */
+        public function getApi() {
             
             $currentUri = parse_url(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
             
@@ -122,6 +141,7 @@ namespace Niuware\WebFramework {
                 $this->classFile = $func[1];
                 $this->methodName = "get" . $func[2];
 
+                // Parse the query for the requested URL
                 if (isset($currentUri['query'])) {
 
                     $params = array();

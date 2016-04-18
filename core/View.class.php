@@ -1,7 +1,17 @@
-<?php
+<?php 
 
+/**
+* This class is part of the core of Niuware WebFramework 
+* and is not particularly intended to be modified.
+* For information about the license please visit the 
+* GIT repository at:
+* https://github.com/niuware/web-framework
+*/
 namespace Niuware\WebFramework {
     
+    /**
+    * Base class for all View classes
+    */
     abstract class View {
         
         protected $attributes = array();
@@ -9,6 +19,9 @@ namespace Niuware\WebFramework {
         private $authenticate;
         private $isAdmin;
         
+        /**
+        * Set default values for the view
+        */
         function __construct() { 
             
             $this->attributes = array(
@@ -25,21 +38,33 @@ namespace Niuware\WebFramework {
             $this->isAdmin = false;
         }
         
+        /**
+        * Gets a View property
+        */
         public function __get($name) {
             
             return $this->attributes[$name];
         }
         
+        /**
+        * Sets a property to the View
+        */
         public function __set($name, $value) {
             
             $this->attributes[$name] = $value;
         }
         
+        /**
+        * Prints the View's HTML template
+        */
         protected function renderTemplate() {
             
             echo file_get_contents("./templates/" . $this->attributes['template']);
         }
         
+        /**
+        * Prints the Javascript files' HTML import tags  
+        */
         public function js() {
 
             foreach ($this->attributes['js'] as $file) {
@@ -50,6 +75,9 @@ namespace Niuware\WebFramework {
             }
         }
         
+        /**
+        * Prints the CDN URLs' HTML import tags  
+        */
         public function cdn() {
 
             foreach ($this->attributes['cdn'] as $url => $attributes) {
@@ -67,6 +95,9 @@ namespace Niuware\WebFramework {
             }
         }
         
+        /**
+        * Prints the meta tags (names and properties)  
+        */
         public function metas() {
             
             foreach($this->attributes['metaTags'] as $name => $content) {
@@ -82,6 +113,9 @@ namespace Niuware\WebFramework {
             }
         }
         
+        /**
+        * Prints the CSS files' HTML import tags  
+        */
         public function styles() {
 
             foreach ($this->attributes['styles'] as $path => $fileArray) {
