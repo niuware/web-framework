@@ -1,5 +1,15 @@
 <?php
  
+/**
+* Niuware WebFramework
+* Settings class
+*
+* General configuration for the web application.
+* This file may contain secret API keys and database access passwords, 
+* so keep this file out of the public scope, for example:
+* {web-root}/etc/nwf/Settings.php
+*
+*/
 namespace Niuware\WebFramework {
     
     date_default_timezone_set('UTC');
@@ -19,16 +29,6 @@ namespace Niuware\WebFramework {
     define(__NAMESPACE__ . "\DEFAULT_DESCRIPTION",  "");
     define(__NAMESPACE__ . "\DEFAULT_KEYWORDS",     "");
     
-    /**
-    * Niuware WebFramework
-    * Settings class
-    *
-    * General configuration for the web application.
-    * This file may contain secret API keys and database access passwords, 
-    * so keep this file out of the public scope, for example:
-    * {web-root}/etc/nwf/Settings.php
-    *
-    */
     final class Settings {
         
         // string : path => array(fileBaseName, authenticate = false)

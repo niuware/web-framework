@@ -7,7 +7,7 @@
 * GIT repository at:
 * https://github.com/niuware/web-framework
 */
-namespace Niuware\WebFramework\Models {
+namespace Niuware\WebFramework {
 
     /**
     * Interface implemented by all Model classes

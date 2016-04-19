@@ -57,7 +57,7 @@ namespace Niuware\WebFramework {
         /**
         * Prints the View's HTML template
         */
-        protected function renderTemplate() {
+        protected function render() {
             
             echo file_get_contents("./templates/" . $this->attributes['template']);
         }

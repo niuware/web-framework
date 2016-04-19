@@ -36,6 +36,8 @@ namespace Niuware\WebFramework {
             $this->setLanguage();
             
             $this->router = new Router();
+            
+            $this->start();
         }
         
         /**
@@ -71,13 +73,54 @@ namespace Niuware\WebFramework {
         * This method is only called if the server request is  
         * NOT an API call
         */
-        public function start() {
+        private function start() {
             
             spl_autoload_register(__NAMESPACE__ . "\Autoloader::view");
             
             $this->view =  $this->router->getViewInstance();
             
             $this->loadBaseTemplate();
+        }
+        
+        /**
+        * Prints an HTML template
+        * @param string $template Name of the template file
+        */
+        private function render($template) {
+            
+            echo file_get_contents("./templates/" . $template);
+        }
+        
+        /**
+        * Returns the prefix for a template
+        * @return string Main or Admin
+        */
+        private function templatePrefix() {
+            
+            $template = "main";
+            
+            if ($this->router->isAdmin()) {
+                
+                $template = "admin";
+            }
+            
+            return $template;
+        }
+        
+        /**
+        * Renders a header custom template
+        */
+        public function renderHeader() {
+            
+            $this->render($this->templatePrefix() . "-header-template.html");
+        }
+        
+        /**
+        * Renders a footer custom template
+        */
+        public function renderFooter() {
+            
+            $this->render($this->templatePrefix() . "-footer-template.html");
         }
         
         /**

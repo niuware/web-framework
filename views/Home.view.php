@@ -4,7 +4,7 @@ namespace Niuware\WebFramework\Views {
     
     use \Niuware\WebFramework\View;
     
-    final class Home extends View {
+    final class Home extends View implements \Niuware\WebFramework\IView {
         
         function __construct() {
             
@@ -16,7 +16,7 @@ namespace Niuware\WebFramework\Views {
         
         public function render() {
             
-            parent::renderTemplate();
+            parent::render();
         }
     } 
 }

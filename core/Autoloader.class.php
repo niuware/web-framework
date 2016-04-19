@@ -35,7 +35,10 @@ namespace Niuware\WebFramework {
             
             $file = './core/' . substr($class, strrpos($class, '\\') + 1);
             
-            self::load($file . '.class.php');
+            if (!self::load($file . '.class.php')) {
+                
+                self::load($file . '.interface.php');
+            }
         }
         
         /**
