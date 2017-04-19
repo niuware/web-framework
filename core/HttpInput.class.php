@@ -7,42 +7,41 @@
 * GIT repository at:
 * https://github.com/niuware/web-framework
 */
-namespace Niuware\WebFramework {
+namespace Niuware\WebFramework;
     
+/**
+* Process an HTTP request
+*/
+final class HttpInput {
+
+    function __construct() { 
+
+        $this->initialize();
+    }
+
     /**
-    * Process an HTTP request
+    * Instantiate a new API class object to execute an 
+    * API call, depending on the type of HTTP requested method
     */
-    final class HttpInput {
-        
-        function __construct() { 
-            
-            $this->initialize();
-        }
-        
-        /**
-        * Instanciate a new Api class object to execute an 
-        * API call, depending on the type of HTTP requested method
-        */
-        private function initialize() {
-            
-            if (filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD') == "POST") {
+    private function initialize() {
 
-                if (filter_input(INPUT_POST, 'api')) {
+        if (filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD') == "POST") {
 
-                    $api = new Api();
-
-                    $api->postApi(filter_input(INPUT_POST, 'api'), filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY));
-                }
-                
-            } elseif (filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD') == "GET") {
+            if (filter_input(INPUT_POST, 'api')) {
 
                 $api = new Api();
 
-                $api->getApi();
+                $api->postApi(filter_input(INPUT_POST, 'api'), filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY));
             }
+
+        } elseif (filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD') == "GET") {
+
+            $api = new Api();
+
+            $api->getApi();
         }
     }
-    
-    // Creates an object of this class 
-    $http = new HttpInput();
 }
+
+// Creates an object of this class 
+$http = new HttpInput();

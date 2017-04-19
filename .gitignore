@@ -1,11 +1,4 @@
-.vscode
-nbproject/*
-
-# HTMLPurifier Library
-lib/htmlpurifier/*/*
-lib/htmlpurifier/*.*
-!lib/htmlpurifier/readme.md
-
 # Node dependencies
 node_modules
 typings
+/nbproject/*

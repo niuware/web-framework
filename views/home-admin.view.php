@@ -1,5 +1,4 @@
-<!-- Home.view.php template file -->
-<h1>Welcome to Niuware WebFramework!</h1>
+<h1>Welcome to Admin on Niuware Web Framework!</h1>
 <p>
     If you can see this homepage, you can start coding your new web app :)
 </p>

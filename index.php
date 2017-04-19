@@ -6,15 +6,16 @@
 * GIT repository at:
 * https://github.com/niuware/web-framework
 */
-namespace Niuware\WebFramework
-{
-    require 'etc/nwf/settings.php';
-    require 'core/Autoloader.class.php';
-    
-    spl_autoload_register(null, false);
-    spl_autoload_extensions('.class.php .interface.php .api.php .view.php model.php');
-    spl_autoload_register(__NAMESPACE__ . "\Autoloader::core");
-    
-    // Create the web application
-    $app = new Application();
-}
+namespace Niuware\WebFramework;
+
+// Path to your settings file
+require 'etc/nwf/settings.php';
+require 'core/Autoloader.class.php';
+require 'vendor/autoload.php';
+
+spl_autoload_register(null, false);
+spl_autoload_extensions('.class.php .interface.php .api.php .admin.controller.php .controller.php .model.php');
+spl_autoload_register(__NAMESPACE__ . "\Autoloader::core");
+
+// Create the web application
+$app = Application::getInstance();
