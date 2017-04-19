@@ -7,129 +7,112 @@
 * GIT repository at:
 * https://github.com/niuware/web-framework
 */
-namespace Niuware\WebFramework {
+namespace Niuware\WebFramework;
+    
+/**
+* Executes the application processing the correct routing
+* and loading/rendering the called controller 
+*/
+final class Application {
+
+    private $router;
+
+    private $controller = null;
+
+    private $language = array();
     
     /**
-    * Executes the application processing the correct routing
-    * and loading/rendering the called view 
+     * Returns the singleton for the class
+     */
+    public static function getInstance() {
+        
+        static $instance = null;
+        
+        if ($instance === null) {
+            
+            $instance = new Application();
+        }
+        
+        return $instance;
+    }
+
+    /**
+     * Initializes the application
+     */
+    private function __construct() {
+
+        $this->initialize();
+    }
+
+    /**
+    * Calls all necessary methods to execute the application
     */
-    final class Application {
+    private function initialize() {
         
-        private $router;
-        
-        private $view = null;
-        
-        private $language = array();
-        
-        function __construct() {
-            
-            $this->initialize();
-        }
-        
-        /**
-        * Calls all necessary methods to execute the applicaiton
-        */
-        private function initialize() {
-            
-            session_start();
-            
-            $this->setLanguage();
-            
-            $this->router = new Router();
-            
-            $this->start();
-        }
-        
-        /**
-        * Sets the language defined in the application settings file
-        */
-        private function setLanguage($lang = 'default') {
+        Auth::start();
 
-            $this->language = Settings::$languages[$lang];
+        $this->setLanguage();
 
-            define(__NAMESPACE__ . "\BASE_LANG", $this->language['prefix']);
-            define(__NAMESPACE__ . "\DB_LANG", $this->language['db_prefix']);
+        $this->router = new Router();
+
+        $this->start();
+    }
+
+    /**
+    * Sets the language defined in the application settings file
+    */
+    private function setLanguage($lang = 'default') {
+
+        $this->language = Settings::$languages[$lang];
+
+        define(__NAMESPACE__ . "\BASE_LANG", $this->language['prefix']);
+        define(__NAMESPACE__ . "\DB_LANG", $this->language['db_prefix']);
+    }
+    
+    /**
+     * Calls the method associated with the Uri query string if exists,
+     * if not, calls the default method
+     */
+    private function loadController() {
+        
+        $methodName = strtolower($this->router->getControllerAction());
+        
+        if (!method_exists($this->controller, $methodName)) {
+                    
+            $methodName = 'renderDefault';
         }
         
-        /**
-        * Loads the template for the called view.
-        * If it is for public users then is the main template, otherwise
-        * loads the admin template.
-        */
-        private function loadBaseTemplate() {
-            
-            if (!$this->router->isAdmin()) {
-                
-                include 'templates/main.template.php';    
-            } 
-            else {
-                
-                include 'templates/admin.template.php';
-            }
-        }
+        call_user_func([$this->controller, $methodName], $this->router->getControllerParams());
+    }
+
+    /**
+    * Loads all necessary classes to load the called controller
+    * This method is only called if the server request is  
+    * NOT an API call
+    */
+    private function start() {
+
+        spl_autoload_register(__NAMESPACE__ . "\Autoloader::controller");
+        spl_autoload_register(__NAMESPACE__ . "\Autoloader::model");
         
-        /**
-        * Loads all necessary classes to load the called view
-        * This method is only called if the server request is  
-        * NOT an API call
-        */
-        private function start() {
+        if ($this->router->isAdmin()) {
             
-            spl_autoload_register(__NAMESPACE__ . "\Autoloader::view");
-            
-            $this->view =  $this->router->getViewInstance();
-            
-            $this->loadBaseTemplate();
+            spl_autoload_register(__NAMESPACE__ . "\Autoloader::controllerAdmin");
         }
+
+        Database::boot();
+
+        $this->controller =  $this->router->getControllerInstance();
         
-        /**
-        * Prints an HTML template
-        * @param string $template Name of the template file
-        */
-        private function render($template) {
-            
-            echo file_get_contents("./templates/" . $template);
-        }
-        
-        /**
-        * Returns the prefix for a template
-        * @return string Main or Admin
-        */
-        private function templatePrefix() {
-            
-            $template = "main";
-            
-            if ($this->router->isAdmin()) {
-                
-                $template = "admin";
-            }
-            
-            return $template;
-        }
-        
-        /**
-        * Renders a header custom template
-        */
-        public function renderHeader() {
-            
-            $this->render($this->templatePrefix() . "-header-template.html");
-        }
-        
-        /**
-        * Renders a footer custom template
-        */
-        public function renderFooter() {
-            
-            $this->render($this->templatePrefix() . "-footer-template.html");
-        }
-        
-        /**
-        * Returns the called view object instance
-        * @return View Instance of the view
-        */
-        public function view() {
-            
-            return $this->view;
-        }
-    }    
+        $this->loadController();
+    }
+
+    /**
+    * Returns the called controller object instance
+    * @return Controller instance
+    */
+    public function controller() {
+
+        return $this->controller;
+    }
 }

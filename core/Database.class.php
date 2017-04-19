@@ -7,183 +7,66 @@
 * GIT repository at:
 * https://github.com/niuware/web-framework
 */
-namespace Niuware\WebFramework {
+namespace Niuware\WebFramework;
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+    
+/**
+* Creates a connection to a database using Capsule (Eloquent)
+*/
+final class Database {
+
+    private static $capsule = null;
     
     /**
-    * Creates a connection to a database specified
-    * in the settings file
-    */
-    final class Database {
-
-        private $db;
-        private $dbResponse;
-
-        function __construct() {
-
-            // Create the PDO object and attempt a connection to the database
-            try {
-
-                $this->db = new \PDO(
-                        Settings::$databases['default']['engine'] . ":dbname="
-                        . Settings::$databases['default']['schema'] . "_" . constant(__NAMESPACE__ . "\DB_LANG")
-                        . Settings::$databases['default']['host']
-                        . Settings::$databases['default']['charset'], 
-                        Settings::$databases['default']['user'], 
-                        Settings::$databases['default']['pass']);
-            } catch (\PDOException $e) {
-
-                die("Error 0x101");
-            }
-        }
-
-        /**
-        * Executes a query to the database
-        * @param string $query The query string to execute
-        * @param array $params The parameters to replace in the query string
-        */
-        public function query($query, $params = array()) {
-
-            $this->dbResponse = $this->db->prepare($query);
-
-            if ($this->dbResponse != null) {
-
-                $this->dbResponse->execute($params);
-            } else {
-
-                $this->dbResponse = new \PDOStatement();
-            }
-        }
-
-        /**
-        * Returns the last id from an INSERT query
-        * @return string Inserted row id
-        */
-        public function lastInsertId($name = null) {
-
-            return $this->db->lastInsertId($name);
-        }
-
-        /**
-        * Returns the PDOStatement object
-        * @return PDOStatement Instance of the PDOStatement object
-        */
-        public function getStatement() {
-
-            if ($this->dbResponse == null) {
+     * Gets the Capsule (Eloquent) connection object
+     * @return bool
+     */
+    private static function isLoaded() : bool {
+        
+        if (self::$capsule != null) {
+            
+            if (self::$capsule->getConnection() == null) {
                 
-                $this->dbResponse = new \PDOStatement();
-            }
-            
-            return $this->dbResponse;
-        }
-
-        /**
-        * Returns a column value by index, of a row associated with the executed query
-        * @param int Index of the column to return
-        * @return mixed The column value
-        */
-        public function row($index = 0) {
-
-            return $this->dbResponse->fetchColumn($index);
-        }
-
-        /**
-        * Return the number of rows associated with the executed query
-        * @return int Number of rows
-        */
-        public function count() {
-
-            return $this->dbResponse->rowCount();
-        }
-        
-        /**
-        * Return the error code associated with the executed query
-        * @return string Error code
-        */
-        public function errorCode() {
-            
-            return $this->db->errorCode();
-        }
-        
-        /**
-        * Returns a column value by name, in a row associated with the executed query
-        * @param string $value Name of the column to get
-        * @return mixed Column value
-        */
-        public function fetchValue($value) {
-            
-            $array = $this->dbResponse->fetch(\PDO::FETCH_ASSOC);
-            
-            return $array[$value];
-        }
-        
-        /**
-        * Returns all rows as an array, associated with the executed query
-        * @return array The row values
-        */
-        public function fetchToSingleArray() {
-            
-            return array_values($this->dbResponse->fetchAll(\PDO::FETCH_COLUMN));
-        }
-        
-        /**
-        * Returns all rows as an associative array, associated with the executed query
-        * @return array The (column => value) array
-        */
-        public function fetchToArray() {
-            
-            return $this->dbResponse->fetchAll(\PDO::FETCH_ASSOC);
-        }
-        
-        /**
-        * Returns all rows as objects, associated with the executed query
-        * @return array The (column->value) object array
-        */
-        public function fetchToObject() {
-            
-            return $this->dbResponse->fetchAll(\PDO::FETCH_CLASS, "\stdClass");
-        }
-        
-        /**
-        * Returns the first row as object, associated with the executed query
-        * @return object The (column->value) object
-        */
-        public function fetchToSingleObject() {
-            
-            return $this->dbResponse->fetch(\PDO::FETCH_OBJ);
-        }
-
-        /**
-         * Returns an object of type $model
-         * @param string $model Name of the model to fetch (include full namespace)
-         * @return Model Oject of the $model
-         */
-        public function fetchToModel($model) {
-
-            $fetch = $this->dbResponse->fetchAll(\PDO::FETCH_CLASS, $model);
-
-            return $fetch;
-        }
-        
-        /**
-         * Sets all model data into $obj
-         * @param Model $obj Object of the model to which the data will be set
-         */
-        public function fetchIntoModel(&$obj) {
-            
-            $fetch = $this->dbResponse->fetch(\PDO::FETCH_OBJ);
-            
-            if ($fetch!= false) {
-                
-                $properties = get_object_vars($fetch);
-
-                foreach ($properties as $name => $value) {
-
-                    $obj->{$name} = $value;
-                }
+                return true;
             }
         }
+        
+        return false;
+    }
 
+    /**
+     * Connects with the database registered in the settings file
+     * @return type
+     */
+    static function boot() {
+
+        if (self::isLoaded()) {
+            
+            return;
+        }
+        
+        // Create the Eloquent object and attempt a connection to the database
+        try {
+
+            self::$capsule = new Capsule;
+
+            self::$capsule->addConnection([
+                'driver' => Settings::$databases['default']['engine'],
+                'host' => Settings::$databases['default']['host'],
+                'database' => Settings::$databases['default']['schema'],
+                'username' => Settings::$databases['default']['user'],
+                'password' => Settings::$databases['default']['pass'],
+                'charset' => Settings::$databases['default']['charset'],
+                'collation' => 'utf8_unicode_ci'
+            ]);
+
+            self::$capsule->bootEloquent();
+
+        } catch (\Exception $e) {
+
+            die("Error 0x102");
+        }
     }
 
 }
