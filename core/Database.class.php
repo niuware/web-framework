@@ -10,6 +10,7 @@
 namespace Niuware\WebFramework;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use \Illuminate\Database\Query\Builder;
     
 /**
 * Creates a connection to a database using Capsule (Eloquent)
@@ -62,11 +63,22 @@ final class Database {
             ]);
 
             self::$capsule->bootEloquent();
+            
+            self::$capsule->setAsGlobal();
 
         } catch (\Exception $e) {
 
             die("Error 0x102");
         }
     }
-
+    
+    /**
+     * Returns an Eloquent Builder instance 
+     * @param type $tableName Table name from which the instance will be generated
+     * @return type
+     */
+    static function table($tableName) : Builder {
+        
+        return Capsule::table($tableName);
+    }
 }
