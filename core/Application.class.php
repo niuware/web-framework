@@ -75,11 +75,17 @@ final class Application {
      */
     private function loadController() {
         
-        $methodName = strtolower($this->router->getControllerAction());
+        $baseMethodName = $this->router->getControllerAction();
+        $methodName = $this->router->getRequestMethod() . $baseMethodName;
         
         if (!method_exists($this->controller, $methodName)) {
+            
+            $methodName = $baseMethodName;
+            
+            if (!method_exists($this->controller, $methodName)) {
                     
-            $methodName = 'renderDefault';
+                $methodName = 'renderDefault';
+            }
         }
         
         call_user_func([$this->controller, $methodName], $this->router->getControllerParams());

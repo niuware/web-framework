@@ -14,34 +14,29 @@ namespace Niuware\WebFramework;
 */
 final class HttpInput {
 
-    function __construct() { 
+    function __construct(string $requestMethod) { 
 
-        $this->initialize();
+        if ($requestMethod != null) {
+            
+            $this->initialize($requestMethod);
+        }
     }
 
     /**
     * Instantiate a new API class object to execute an 
     * API call, depending on the type of HTTP requested method
     */
-    private function initialize() {
+    private function initialize($requestMethod) {
 
-        if (filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD') == "POST") {
+        $api = new Api($requestMethod);
+        
+        if ($requestMethod == "post") {
+                
+            $api->postApi(filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY));
 
-            if (filter_input(INPUT_POST, 'api')) {
-
-                $api = new Api();
-
-                $api->postApi(filter_input(INPUT_POST, 'api'), filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY));
-            }
-
-        } elseif (filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD') == "GET") {
-
-            $api = new Api();
+        } elseif ($requestMethod == "get") {
 
             $api->getApi();
         }
     }
 }
-
-// Creates an object of this class 
-$http = new HttpInput();

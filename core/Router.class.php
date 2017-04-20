@@ -25,6 +25,8 @@ class Router {
     private $error = true;
 
     private $admin = false;
+    
+    private $requestMethod = null;
 
     function __construct() {
 
@@ -37,6 +39,8 @@ class Router {
     * Parse the request URL and executes the routing
     */
     private function initialize() {
+        
+        $this->setRequestMethod();
 
         if (BASE_PATH == "/") {
 
@@ -60,6 +64,24 @@ class Router {
         } else {
 
             $this->redirectTask($this->path[0]);
+        }
+    }
+    
+    /**
+     * Sets the request method
+     */
+    private function setRequestMethod() {
+        
+        $requestMethod = filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD');
+        
+        if ($requestMethod == 'GET') {
+            
+            $this->requestMethod = 'get';
+            
+        } elseif ($requestMethod == 'POST') {
+            
+            $this->requestMethod = 'post';
+            
         }
     }
 
@@ -106,6 +128,8 @@ class Router {
         if ($action == "api") {
 
             include 'core/HttpInput.class.php';
+            
+            new HttpInput($this->requestMethod);
 
             exit;
 
@@ -189,7 +213,13 @@ class Router {
 
         } else {
 
-            $this->controller = Routes::$views['admin'][$this->path[1]][0] ?? "";
+            $this->controller = "";
+            
+            if (isset($this->path[1])) {
+                
+                $this->controller = Routes::$views['admin'][$this->path[1]][0] ?? "";
+            }
+            
             $this->controller.= "Admin";
         }
 
@@ -255,5 +285,14 @@ class Router {
     public function isAdmin() : bool {
         
         return $this->admin;
+    }
+    
+    /**
+     * Gets the request method
+     * @return string
+     */
+    public function getRequestMethod() : string {
+        
+        return $this->requestMethod;
     }
 }

@@ -10,7 +10,7 @@
 namespace Niuware\WebFramework;
     
 /**
-* Base class for all Api classes
+* Renders a JSON response
 */
 final class JsonResponse extends Response {
 

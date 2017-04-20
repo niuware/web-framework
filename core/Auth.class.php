@@ -15,7 +15,7 @@ namespace Niuware\WebFramework;
 final class Auth {
     
     /**
-     * Starts the Auth static session variables
+     * Starts the authentication static session variables
      */
     public static function start() {
         

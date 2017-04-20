@@ -7,7 +7,7 @@ use Niuware\WebFramework\HtmlResponse;
 
 final class Home extends Controller {
     
-    public function home($params = []) {
+    public function getHome($params = []) {
         
         $this->title = "My Home Page";
         $this->template = "home.view.php";
