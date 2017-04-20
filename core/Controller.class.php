@@ -23,7 +23,6 @@ abstract class Controller {
     function __construct() { 
 
         $this->title = constant(__NAMESPACE__ . "\DEFAULT_TITLE");
-        $this->template = "default.view.php";
         $this->styles = ['default' => ["main"]];
         $this->js = [];
         $this->cdn = [];
@@ -124,8 +123,15 @@ abstract class Controller {
      * Renders the template set for the controller
      */
     public function render() {
+        
+        $pathToView = "./views/";
+            
+        if (!file_exists($pathToView . $this->template)) {
 
-        include ("./views/" . $this->template);
+            $this->template = "default.view.php";
+        }
+
+        include ($pathToView . $this->template);
     }
 
     /**

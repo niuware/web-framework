@@ -230,7 +230,7 @@ class Router {
     * Returns a new instance of the requested controller
     * @return Controller instance
     */
-    public function getControllerInstance() {
+    public function getControllerInstance() : Controller {
 
         $controllerClass = "\Niuware\WebFramework\Controllers\\" . $this->controller;
 
@@ -294,5 +294,25 @@ class Router {
     public function getRequestMethod() : string {
         
         return $this->requestMethod;
+    }
+    
+    /**
+     * Gets a default view name based on the requested path
+     * @return string
+     */
+    public function getDefaultTemplate() : string {
+        
+        $templateName = $this->getControllerAction();
+        
+        if (!$this->admin) {
+            
+            $templateName.= ".view.php";
+        }
+        else {
+            
+            $templateName.= "-admin.view.php";
+        }
+        
+        return $templateName;
     }
 }

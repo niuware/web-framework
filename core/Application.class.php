@@ -108,9 +108,19 @@ final class Application {
 
         Database::boot();
 
-        $this->controller =  $this->router->getControllerInstance();
+        $this->controller = $this->router->getControllerInstance();
         
-        $this->loadController();
+        if (is_object($this->controller) && 
+                get_parent_class($this->controller) == __NAMESPACE__ . '\Controller') {
+        
+            $this->controller->template = $this->router->getDefaultTemplate();
+
+            $this->loadController();
+            
+        } else {
+            
+            die("Error 0x104");
+        }
     }
 
     /**
