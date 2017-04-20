@@ -55,7 +55,7 @@ abstract class Controller {
     }
 
     /**
-    * Prints the Javascript files' HTML import tags  
+    * Prints the Javascript HTML import tags
     */
     public function js() {
 
@@ -133,6 +133,8 @@ abstract class Controller {
      * @return type
      */
     public function renderDefault() {
+        
+        $this->template = '404.view.php';
 
         return HtmlResponse::getInstance()->render($this);
     }

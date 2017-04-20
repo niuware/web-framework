@@ -7,12 +7,12 @@ use Niuware\WebFramework\Auth;
 
 final class Login extends Controller {
 
-    public function login($params = []) {
+    public function getLogin($params = []) {
         
         Auth::grantAuth();
     }
     
-    public function logout($params = []) {
+    public function getLogout($params = []) {
         
         Auth::revokeAuth();
     }

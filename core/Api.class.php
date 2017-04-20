@@ -16,23 +16,55 @@ namespace Niuware\WebFramework;
 final class Api {
 
     private $error;
+    
     private $errCode;
 
     private $className;
+    
     private $classFile;
+    
     private $methodName;
-    private $params = array();
+    
+    private $currentUri;
+    
+    private $requestMethod;
+    
+    private $params = [];
 
-    function __construct() {
-
-        // Default values
+    function __construct($requestMethod) {
+        
         $this->error = true;
         $this->errCode = "0x201";
         $this->exitFail = false;
+        $this->requestMethod = $requestMethod;
+    }
+    
+    /**
+     * Sets the requested configuration for the API call
+     * @return bool
+     */
+    private function initialize() : bool {
+        
+        $this->currentUri = parse_url(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
+
+        $func = $this->actionPath($this->currentUri['path']);
+        
+        $this->setGetMethod($func);
+        
+        if (isset($func[1]) && !empty($func[1]))
+        {
+            $this->className = "Niuware\WebFramework\Api\\" . $func[1];
+            $this->classFile = $func[1];
+            $this->methodName = $func[2];
+            
+            return true;
+        }
+        
+        return false;
     }
 
     /**
-    * Calls all necessary methods to execute the api call
+    * Calls all necessary methods to execute the API call
     */
     private function start() {
 
@@ -44,7 +76,7 @@ final class Api {
     }
 
     /**
-    * Register the class autoloaders for an api call
+    * Register the class Autoloader for an API call
     */
     private function load() {
 
@@ -67,7 +99,7 @@ final class Api {
     }
 
     /**
-    * Instanciate an object of the desired API class and
+    * Instantiate an object of the desired API class and
     * executes the called method
     */
     private function execute() {
@@ -75,20 +107,45 @@ final class Api {
         if (class_exists($this->className)) {
 
             $obj = new $this->className;
-
-            if (method_exists($obj, $this->methodName)) {
-
+            
+            if ($this->verifyMethod($obj)) {
+                
                 $this->error = false;
 
-                call_user_func(array($obj, $this->methodName), $this->params);
+                call_user_func([$obj, $this->methodName], $this->params);
+                
             } else {
-
+                
                 $this->errCode = "0x202";
             }
+
         } else {
 
             $this->errCode = "0x203";
         }
+    }
+    
+    /**
+     * Verifies if the called API class method exists
+     * @param type $obj API class object
+     * @return bool
+     */
+    private function verifyMethod(&$obj) : bool {
+        
+        $baseMethodName = $this->methodName;
+        $this->methodName = $this->requestMethod . $baseMethodName;
+
+        if (!method_exists($obj, $this->methodName)) {
+
+            $this->methodName = $baseMethodName;
+
+            if (!method_exists($obj, $this->methodName)) {
+
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     /**
@@ -115,6 +172,7 @@ final class Api {
     /**
      * Sets a value to the requested method if not set
      * @param array $func Source path array
+     * @param int $index Index to set
      */
     private function setGetMethod(array &$func) {
         
@@ -129,16 +187,14 @@ final class Api {
      * @param string $apiCall Name of the method to execute
      * @param array $params Method arguments
      */
-    public function postApi($apiCall, $params) {
+    public function postApi($params) {
+        
+        if ($this->initialize()) {
+            
+            $this->params = $params;
 
-        $func = explode("/", $apiCall);
-
-        $this->className = "Niuware\WebFramework\Api\\" . $func[0];
-        $this->classFile = $func[1];
-        $this->methodName = "post" . $func[1];
-        $this->params = $params;
-
-        $this->start();
+            $this->start();
+        }
     }
 
     /**
@@ -146,24 +202,14 @@ final class Api {
      */
     public function getApi() {
 
-        $currentUri = parse_url(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
-
-        $func = $this->actionPath($currentUri['path']);
+        if ($this->initialize()) {
         
-        $this->setGetMethod($func);
-
-        if (isset($func[1]) && !empty($func[1]))
-        {
-            $this->className = "Niuware\WebFramework\Api\\" . $func[1];
-            $this->classFile = $func[1];
-            $this->methodName = "get" . $func[2];
-
             // Parse the query for the requested URL
-            if (isset($currentUri['query'])) {
+            if (isset($this->currentUri['query'])) {
 
                 $params = array();
 
-                parse_str($currentUri['query'], $params);
+                parse_str($this->currentUri['query'], $params);
 
                 $this->params = $params;
             }
