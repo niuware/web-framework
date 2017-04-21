@@ -88,4 +88,15 @@ class Autoloader {
 
         self::load($file . '.admin.controller.php');
     }
+    
+    /**
+     * Registers the autoloading for helper classes
+     * @param type $class Class to load
+     */
+    public static function helpers($class) {
+        
+        $file = './helpers/' . substr($class, strrpos($class, '\\') + 1);
+
+        self::load($file . '.helper.php');
+    }
 }

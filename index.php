@@ -14,7 +14,7 @@ require 'core/Autoloader.class.php';
 require 'vendor/autoload.php';
 
 spl_autoload_register(null, false);
-spl_autoload_extensions('.class.php .interface.php .api.php .admin.controller.php .controller.php .model.php');
+spl_autoload_extensions('.class.php .controller.php .model.php .api.php .admin.controller.php .helper.php');
 spl_autoload_register(__NAMESPACE__ . "\Autoloader::core");
 
 // Create the web application
