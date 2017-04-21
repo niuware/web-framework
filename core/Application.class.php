@@ -113,7 +113,7 @@ final class Application {
         if (is_object($this->controller) && 
                 get_parent_class($this->controller) == __NAMESPACE__ . '\Controller') {
         
-            $this->controller->template = $this->router->getDefaultTemplate();
+            $this->controller->view = $this->router->getDefaultView();
 
             $this->loadController();
             

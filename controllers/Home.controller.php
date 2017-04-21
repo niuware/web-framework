@@ -10,7 +10,6 @@ final class Home extends Controller {
     public function getHome($params = []) {
         
         $this->title = "My Home Page";
-        $this->template = "home.view.php";
 
         $this->styles = ["default" => ["main"]];
         
