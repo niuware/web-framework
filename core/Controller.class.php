@@ -142,6 +142,6 @@ abstract class Controller {
         
         $this->view = '404.view.php';
 
-        return HtmlResponse::getInstance()->render($this);
+        HtmlResponse::getInstance()->render($this);
     }
 }
