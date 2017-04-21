@@ -300,19 +300,19 @@ class Router {
      * Gets a default view name based on the requested path
      * @return string
      */
-    public function getDefaultTemplate() : string {
+    public function getDefaultView() : string {
         
-        $templateName = $this->getControllerAction();
+        $viewName = $this->getControllerAction();
         
         if (!$this->admin) {
             
-            $templateName.= ".view.php";
+            $viewName.= ".view.php";
         }
         else {
             
-            $templateName.= "-admin.view.php";
+            $viewName.= "-admin.view.php";
         }
         
-        return $templateName;
+        return $viewName;
     }
 }

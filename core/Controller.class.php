@@ -120,27 +120,27 @@ abstract class Controller {
     }
 
     /**
-     * Renders the template set for the controller
+     * Renders the view for the controller
      */
     public function render() {
         
         $pathToView = "./views/";
             
-        if (!file_exists($pathToView . $this->template)) {
+        if (!file_exists($pathToView . $this->view)) {
 
-            $this->template = "default.view.php";
+            $this->view = "default.view.php";
         }
 
-        include ($pathToView . $this->template);
+        include ($pathToView . $this->view);
     }
 
     /**
-     * Renders the default template for any controller
+     * Renders the default view for any controller
      * @return type
      */
     public function renderDefault() {
         
-        $this->template = '404.view.php';
+        $this->view = '404.view.php';
 
         return HtmlResponse::getInstance()->render($this);
     }

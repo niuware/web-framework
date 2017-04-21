@@ -10,7 +10,6 @@ final class HomeAdmin extends Controller {
     public function getHome($params = []) {
         
         $this->title = "My Admin Home Page View";
-        $this->template = "home-admin.view.php";
 
         $this->styles = ["default" => ["main"]];
         
