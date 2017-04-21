@@ -10,31 +10,14 @@
 namespace Niuware\WebFramework;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use \Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Builder;
     
 /**
 * Creates a connection to a database using Capsule (Eloquent)
 */
 final class Database {
 
-    private static $capsule = null;
-    
-    /**
-     * Gets the Capsule (Eloquent) connection object
-     * @return bool
-     */
-    private static function isLoaded() : bool {
-        
-        if (self::$capsule != null) {
-            
-            if (self::$capsule->getConnection() == null) {
-                
-                return true;
-            }
-        }
-        
-        return false;
-    }
+    private static $isLoaded = false;
 
     /**
      * Connects with the database registered in the settings file
@@ -42,7 +25,7 @@ final class Database {
      */
     static function boot() {
 
-        if (self::isLoaded()) {
+        if (self::$isLoaded == true) {
             
             return;
         }
@@ -50,9 +33,9 @@ final class Database {
         // Create the Eloquent object and attempt a connection to the database
         try {
 
-            self::$capsule = new Capsule;
+            $capsule = new Capsule;
 
-            self::$capsule->addConnection([
+            $capsule->addConnection([
                 'driver' => Settings::$databases['default']['engine'],
                 'host' => Settings::$databases['default']['host'],
                 'database' => Settings::$databases['default']['schema'],
@@ -62,9 +45,11 @@ final class Database {
                 'collation' => 'utf8_unicode_ci'
             ]);
 
-            self::$capsule->bootEloquent();
+            $capsule->bootEloquent();
             
-            self::$capsule->setAsGlobal();
+            $capsule->setAsGlobal();
+            
+            self::$isLoaded = true;
 
         } catch (\Exception $e) {
 
