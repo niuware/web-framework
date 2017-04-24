@@ -88,7 +88,16 @@ final class Application {
             }
         }
         
-        call_user_func([$this->controller, $methodName], $this->router->getControllerParams());
+        $reflection = new \ReflectionMethod($this->controller, $methodName);
+        
+        if ($reflection->isPublic()) {
+        
+            call_user_func([$this->controller, $methodName], $this->router->getControllerParams());
+        }
+        else {
+            
+            die("Error 0x105");
+        }
     }
 
     /**
