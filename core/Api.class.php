@@ -145,6 +145,13 @@ final class Api {
             }
         }
         
+        $reflection = new \ReflectionMethod($obj, $this->methodName);
+        
+        if (!$reflection->isPublic()) {
+            
+            return false;
+        }
+        
         return true;
     }
 
