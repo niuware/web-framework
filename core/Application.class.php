@@ -75,7 +75,8 @@ final class Application {
      */
     private function loadController() {
         
-        $baseMethodName = $this->router->getControllerAction();
+        $baseMethodName = str_replace(['-', '_'], '', $this->router->getControllerAction());
+        
         $methodName = $this->router->getRequestMethod() . $baseMethodName;
         
         if (!method_exists($this->controller, $methodName)) {
