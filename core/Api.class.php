@@ -21,8 +21,6 @@ final class Api {
 
     private $className;
     
-    private $classFile;
-    
     private $methodName;
     
     private $currentUri;
@@ -54,7 +52,6 @@ final class Api {
         if (isset($func[1]) && !empty($func[1]))
         {
             $this->className = "Niuware\WebFramework\Api\\" . $func[1];
-            $this->classFile = $func[1];
             $this->methodName = $func[2];
             
             return true;
