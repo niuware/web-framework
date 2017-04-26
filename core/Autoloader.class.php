@@ -45,12 +45,12 @@ class Autoloader {
     }
 
     /**
-     * Registers the autoloading for api classes
+     * Registers the autoloading for API classes
      * @param type $class Class to load
      */
     public static function api($class) {
 
-        $file = './api/' . str_replace("Api", "", substr($class, strrpos($class, '\\') + 1));
+        $file = './api/' . strtolower(substr($class, strrpos($class, '\\') + 1));
 
         self::load($file . '.api.php');
     }
