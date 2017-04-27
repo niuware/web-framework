@@ -27,6 +27,10 @@ class Router {
     private $admin = false;
     
     private $requestMethod = null;
+    
+    private $queryString = array();
+    
+    private $postParams = array();
 
     function __construct() {
 
@@ -53,6 +57,8 @@ class Router {
         $this->path = explode('/', $currentUri);
 
         $this->action = $this->path[0];
+        
+        $this->setQueryString();
 
         // If the URL is associated to a controller, then load it
         if (isset(Routes::$views['main'][$this->path[0]])) {
@@ -67,12 +73,26 @@ class Router {
         }
     }
     
+    private function setQueryString() {
+        
+        $queryString = filter_input(INPUT_SERVER, 'QUERY_STRING');
+        
+        if ($queryString!= "") {
+            
+            parse_str($queryString, $this->queryString);
+            
+            $this->path[0] = str_replace(['?' . $queryString, $queryString], '', $this->path[0]);
+            
+            $this->action = $this->path[0];
+        }
+    }
+    
     /**
      * Sets the request method
      */
     private function setRequestMethod() {
         
-        $requestMethod = filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD');
+        $requestMethod = filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD', FILTER_SANITIZE_URL);
         
         if ($requestMethod == 'GET') {
             
@@ -82,6 +102,7 @@ class Router {
             
             $this->requestMethod = 'post';
             
+            $this->postParams = filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
         }
     }
 
@@ -267,15 +288,26 @@ class Router {
      * @return array
      */
     public function getControllerParams() : array {
+        
+        $pathParams = [];
 
         if (!$this->admin) {
             
-            return array_splice($this->path, 1);
+            $pathParams = array_splice($this->path, 1);
         }
         else {
             
-            return array_splice($this->path, 2);
+            $pathParams = array_splice($this->path, 2);
         }
+            
+        $allParams = array_merge($pathParams, $this->queryString);
+        
+        if ($this->requestMethod == 'post') {
+            
+            $allParams = array_merge($allParams, $this->postParams);
+        }
+        
+        return $allParams;
     }
     
     /**
