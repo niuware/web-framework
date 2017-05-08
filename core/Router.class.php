@@ -102,7 +102,7 @@ class Router {
             
             $this->requestMethod = 'post';
             
-            $this->postParams = filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            $this->postParams = filter_input_array(INPUT_POST);
         }
     }
 
@@ -302,7 +302,8 @@ class Router {
             
         $allParams = array_merge($pathParams, $this->queryString);
         
-        if ($this->requestMethod == 'post') {
+        if ($this->requestMethod == 'post' && 
+                $this->postParams != null) {
             
             $allParams = array_merge($allParams, $this->postParams);
         }
