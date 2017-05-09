@@ -72,4 +72,54 @@ final class Auth {
         
         $_SESSION['nwf_auth_' . SESSION_ID . '_' . $mode . '_' . '_login_' . session_id()] = false;
     }
+    
+    /**
+     * Adds a value to the current session
+     * @param string $name String name of the value
+     * @param type $value
+     * @param type $mode Main or Admin session
+     */
+    public static function add(string $name, $value, $mode = 'main') {
+        
+        $_SESSION['nfw_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()] = $value;
+    }
+    
+    /**
+     * Verifies if the session has a value
+     * @param string $name Name of the value to search
+     * @param type $mode
+     * @return type
+     */
+    public static function has(string $name, $mode = 'main') {
+        
+        return isset($_SESSION['nfw_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+    }
+    
+    /**
+     * Removes a value from the session
+     * @param string $name
+     * @param type $mode
+     */
+    public static function remove(string $name, $mode = 'main') {
+        
+        unset($_SESSION['nfw_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+    }
+    
+    /**
+     * Returns a value from the session
+     * @param string $name
+     * @param type $mode
+     * @return type
+     */
+    public static function get(string $name, $mode = 'main') {
+        
+        if (self::has($name, $mode)) {
+            
+            return isset($_SESSION['nfw_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+        }
+        else {
+            
+            return null;
+        }
+    }
 }
