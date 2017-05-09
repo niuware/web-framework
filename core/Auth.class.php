@@ -77,49 +77,87 @@ final class Auth {
      * Adds a value to the current session
      * @param string $name String name of the value
      * @param type $value
-     * @param type $mode Main or Admin session
+     * @param type $mode Type of session (either 'main', or 'admin')
      */
     public static function add(string $name, $value, $mode = 'main') {
         
-        $_SESSION['nfw_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()] = $value;
+        $_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()] = $value;
     }
     
     /**
      * Verifies if the session has a value
      * @param string $name Name of the value to search
-     * @param type $mode
+     * @param type $mode Type of session (either 'main', or 'admin')
      * @return type
      */
     public static function has(string $name, $mode = 'main') {
         
-        return isset($_SESSION['nfw_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+        return isset($_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
     }
     
     /**
      * Removes a value from the session
      * @param string $name
-     * @param type $mode
+     * @param type $mode Type of session (either 'main', or 'admin')
      */
     public static function remove(string $name, $mode = 'main') {
         
-        unset($_SESSION['nfw_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+        unset($_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
     }
     
     /**
      * Returns a value from the session
      * @param string $name
-     * @param type $mode
+     * @param type $mode Type of session (either 'main', or 'admin')
      * @return type
      */
     public static function get(string $name, $mode = 'main') {
         
         if (self::has($name, $mode)) {
             
-            return isset($_SESSION['nfw_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+            return isset($_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
         }
         else {
             
             return null;
         }
+    }
+    
+    /**
+     * Unset session variables by name
+     * @param type $filter Prefix of the session variables name
+     * @param type $mode Type of session (either 'main', or 'admin')
+     */
+    private static function destroyWithFilter($filter, $mode) {
+        
+        $prefix = $filter . '_' . SESSION_ID . '_' . $mode . '_';
+        $prefixLength = strlen($prefix);
+        
+        foreach ($_SESSION as $var => $value) {
+            
+            if (substr($var, 0, $prefixLength) === $prefix) {
+                
+                unset($_SESSION[$var]);
+            }
+        }
+    }
+    
+    /**
+     * Destroys all user custom session variables
+     * @param type $mode Type of session (either 'main', or 'admin')
+     */
+    public static function destroy($mode = 'main') {
+        
+        self::destroyWithFilter('nwf_user', $mode);
+    }
+    
+    /**
+     * Destroys all user custom and authentication session variables
+     * @param type $mode Type of session (either 'main', or 'admin')
+     */
+    public static function end($mode = 'main') {
+        
+        self::destroyWithFilter('nwf_user', $mode);
+        self::destroyWithFilter('nwf_auth', $mode);
     }
 }
