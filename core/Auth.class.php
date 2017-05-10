@@ -79,7 +79,7 @@ final class Auth {
      * @param type $value
      * @param type $mode Type of session (either 'main', or 'admin')
      */
-    public static function add(string $name, $value, $mode = 'main') {
+    public static function add(string $name, $value, string $mode = 'main') {
         
         $_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()] = $value;
     }
@@ -90,7 +90,7 @@ final class Auth {
      * @param type $mode Type of session (either 'main', or 'admin')
      * @return type
      */
-    public static function has(string $name, $mode = 'main') {
+    public static function has(string $name, string $mode = 'main') {
         
         return isset($_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
     }
@@ -100,7 +100,7 @@ final class Auth {
      * @param string $name
      * @param type $mode Type of session (either 'main', or 'admin')
      */
-    public static function remove(string $name, $mode = 'main') {
+    public static function remove(string $name, string $mode = 'main') {
         
         unset($_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
     }
@@ -111,7 +111,7 @@ final class Auth {
      * @param type $mode Type of session (either 'main', or 'admin')
      * @return type
      */
-    public static function get(string $name, $mode = 'main') {
+    public static function get(string $name, string $mode = 'main') {
         
         if (self::has($name, $mode)) {
             
@@ -146,7 +146,7 @@ final class Auth {
      * Destroys all user custom session variables
      * @param type $mode Type of session (either 'main', or 'admin')
      */
-    public static function destroy($mode = 'main') {
+    public static function destroy(string $mode = 'main') {
         
         self::destroyWithFilter('nwf_user', $mode);
     }
@@ -155,7 +155,7 @@ final class Auth {
      * Destroys all user custom and authentication session variables
      * @param type $mode Type of session (either 'main', or 'admin')
      */
-    public static function end($mode = 'main') {
+    public static function end(string $mode = 'main') {
         
         self::destroyWithFilter('nwf_user', $mode);
         self::destroyWithFilter('nwf_auth', $mode);
