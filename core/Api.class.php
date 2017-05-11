@@ -167,7 +167,7 @@ final class Api {
 
         } else {
 
-            $path = str_replace(BASE_PATH, "", $currentPath);
+            $path = str_replace('/' . BASE_PATH, '', $currentPath);
         }
 
         return explode('/', $path);
