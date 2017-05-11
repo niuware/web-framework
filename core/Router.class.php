@@ -193,13 +193,41 @@ class Router {
 
             if (!$this->admin) {
 
-                header("Location: " . BASE_URL . HOMEPAGE);
+                $this->redirectFailMain();
 
             } else {
 
-                header("Location: " . BASE_URL_ADMIN . HOMEPAGE_ADMIN);
+                $this->redirectFailAdmin();
             }
 
+            header('HTTP/1.0 403 Forbidden');
+            
+            exit;
+        }
+    }
+    
+    /**
+     * Redirects the browser to the default main application route
+     */
+    private function redirectFailMain() {
+        
+        if (!empty(Routes::$views['main'])) {
+                    
+            header("Location: " . BASE_URL . HOMEPAGE);
+            
+            exit;
+        }
+    }
+    
+    /**
+     * Redirects the browser to the default admin application route
+     */
+    private function redirectFailAdmin() {
+        
+        if (!empty(Routes::$views['admin'])) {
+                    
+            header("Location: " . BASE_URL_ADMIN . HOMEPAGE_ADMIN);
+            
             exit;
         }
     }
