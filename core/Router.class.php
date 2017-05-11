@@ -51,7 +51,7 @@ class Router {
             $currentUri = substr(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL), 1);
         } else {
 
-            $currentUri = str_replace(BASE_PATH, "", filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
+            $currentUri = str_replace('/' . BASE_PATH, '', filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
         }
 
         $this->path = explode('/', $currentUri);
