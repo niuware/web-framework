@@ -35,6 +35,15 @@ final class JsonResponse extends Response {
 
         self::$error = $error;
     }
+    
+    /**
+     * Returns the current error status
+     * @return type
+     */
+    public static function getError() {
+        
+        return self::$error;
+    }
 
     /**
     * Sends the response to the client
