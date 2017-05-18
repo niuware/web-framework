@@ -32,7 +32,20 @@ final class HttpInput {
         
         if ($requestMethod == "post") {
                 
-            $api->postApi(filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY));
+            $postData = null;
+            
+            $contentType = filter_input(INPUT_SERVER, 'CONTENT_TYPE');
+            
+            if (substr($contentType, 0, 16) == 'application/json') {
+                
+                $postData = json_decode(file_get_contents("php://input"), true);
+            }
+            else {
+                
+                $postData = filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            }
+            
+            $api->postApi($postData);
 
         } elseif ($requestMethod == "get") {
 
