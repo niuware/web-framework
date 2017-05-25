@@ -315,7 +315,7 @@ class Router {
      * Gets the parameters for the current method (Uri query)
      * @return array
      */
-    public function getControllerParams() : array {
+    public function getControllerParams() : HttpRequest {
         
         $pathParams = [];
 
@@ -336,7 +336,7 @@ class Router {
             $allParams = array_merge($allParams, $this->postParams);
         }
         
-        return $allParams;
+        return new HttpRequest($allParams);
     }
     
     /**

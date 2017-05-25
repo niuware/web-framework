@@ -7,7 +7,7 @@ use Niuware\WebFramework\HtmlResponse;
 
 final class Home extends Controller {
     
-    public function getHome($params = []) {
+    public function getHome(HttpRequest $request) {
         
         $this->title = "My Home Page";
 
