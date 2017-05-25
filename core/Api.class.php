@@ -27,7 +27,7 @@ final class Api {
     
     private $requestMethod;
     
-    private $params = [];
+    private $params;
 
     function __construct($requestMethod) {
         
@@ -195,7 +195,7 @@ final class Api {
         
         if ($this->initialize()) {
             
-            $this->params = $params;
+            $this->params = new HttpRequest($params);
 
             $this->start();
         }
@@ -215,7 +215,7 @@ final class Api {
 
                 parse_str($this->currentUri['query'], $params);
 
-                $this->params = $params;
+                $this->params = new HttpRequest($params);
             }
 
             $this->start();
