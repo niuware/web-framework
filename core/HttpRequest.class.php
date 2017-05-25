@@ -43,9 +43,12 @@ final class HttpRequest {
         $this->attributes[$name] = $value;
     }
 
-    function __construct(array $params) { 
+    function __construct(array $params = null) { 
         
-        $this->attributes = $params;
+        if ($params !== null) {
+            
+            $this->attributes = $params;
+        }
         
         $this->setHeaders();
     }
