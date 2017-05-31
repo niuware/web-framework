@@ -15,19 +15,25 @@ namespace Niuware\WebFramework;
 abstract class Controller {
 
     private $authenticate;
+    
     private $isAdmin;
+    
+    private $renderer;
+    
+    private $attributes = [];
 
     /**
     * Set default values for the controller
     */
     function __construct() { 
 
-        $this->title = constant(__NAMESPACE__ . "\DEFAULT_TITLE");
+        $this->title = DEFAULT_TITLE;
         $this->styles = ['default' => ["main"]];
         $this->js = [];
         $this->cdn = [];
         $this->metaTags = [];
         $this->metaProps = [];
+        $this->renderer = DEFAULT_RENDERER;
 
         $this->authenticate = false;
         $this->isAdmin = false;
@@ -40,7 +46,12 @@ abstract class Controller {
      */
     public function __get($name) {
 
-        return $this->$name;
+        if (isset($this->attributes[$name])) {
+            
+            return $this->attributes[$name];
+        }
+        
+        return null;
     }
 
     /**
@@ -50,7 +61,7 @@ abstract class Controller {
      */
     public function __set($name, $value) {
 
-        $this->$name = $value;
+        $this->attributes[$name] = $value;
     }
 
     /**
@@ -118,6 +129,15 @@ abstract class Controller {
             }
         }
     }
+    
+    /**
+     * Sets the renderer to use for the controller
+     * @param string $renderer Should be either 'php' or 'twig'
+     */
+    public function setRenderer(string $renderer = 'php') {
+        
+        $this->renderer = $renderer;
+    }
 
     /**
      * Renders the view for the controller
@@ -125,13 +145,45 @@ abstract class Controller {
     public function render() {
         
         $pathToView = "./views/";
-            
+        
         if (!file_exists($pathToView . $this->view)) {
 
             $this->view = "default.view.php";
         }
-
-        include ($pathToView . $this->view);
+        
+        if ($this->renderer === 'twig') {
+            
+            $this->renderWithTwig($pathToView);
+        }
+        else {
+            
+            include ($pathToView . $this->view);
+        }
+    }
+    
+    /**
+     * Renders the controller view using Twig Template Engine
+     */
+    public function renderWithTwig() {
+        
+        $twigLoader = new \Twig_Loader_Filesystem('./views');
+        
+        $rendererSettings['cache'] = './cache';
+        
+        if (DEBUG_MODE === true) {
+            
+            $rendererSettings['debug'] = true;
+            $rendererSettings['strict_variables'] = true;
+        }
+        
+        $twig = new \Twig_Environment($twigLoader, $rendererSettings);
+        
+        $twigView = str_replace(".php", ".twig", $this->view);
+        
+        $twig->addExtension(new \Twig_Extension_Debug());
+        $twig->addExtension(new Extension());
+        
+        echo $twig->render($twigView, $this->attributes);
     }
 
     /**

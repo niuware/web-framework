@@ -1,4 +1,2 @@
-# Node dependencies
-node_modules
-typings
 /nbproject/*
+/cache/*

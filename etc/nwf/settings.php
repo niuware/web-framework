@@ -24,6 +24,8 @@ define(__NAMESPACE__ . '\BASE_URL_SSL',     'https://localhost/');
 define(__NAMESPACE__ . '\BASE_URL_ADMIN',   'http://localhost/admin/');
 
 // General
+define(__NAMESPACE__ . '\DEBUG_MODE',           false);
+define(__NAMESPACE__ . '\DEFAULT_RENDERER',     'php');
 define(__NAMESPACE__ . '\SESSION_ID',           'e5f5d640');
 define(__NAMESPACE__ . '\HOMEPAGE',             'home');
 define(__NAMESPACE__ . '\HOMEPAGE_ADMIN',       'home');
