@@ -49,21 +49,6 @@ final class HtmlResponse extends Response {
     }
     
     /**
-     * Renders the view for the passed controller
-     * @param \Niuware\WebFramework\Controller $controller
-     */
-    public function render(Controller &$controller) {
-        
-        $this->controller = $controller;
-        
-        self::renderHeader();
-        
-        $this->controller->render();
-        
-        self::renderFooter();
-    }
-    
-    /**
      * Renders the footer for the current session
      */
     private function renderFooter() {
@@ -75,6 +60,33 @@ final class HtmlResponse extends Response {
         else {
 
             include 'views/admin-footer.view.php';
+        }
+    }
+    
+    private function renderNative() {
+        
+        self::renderHeader();
+        
+        $this->controller->render();
+        
+        self::renderFooter();
+    }
+    
+    /**
+     * Renders the view for the passed controller
+     * @param \Niuware\WebFramework\Controller $controller
+     */
+    public function render(Controller &$controller) {
+        
+        $this->controller = $controller;
+        
+        if ($this->controller->getRenderer() === 'twig') {
+            
+            $this->controller->render();
+        }
+        else {
+            
+            $this->renderNative();
         }
     }
 }

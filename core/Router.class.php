@@ -147,8 +147,6 @@ class Router {
     private function redirectTask($action) {
 
         if ($action == "api") {
-
-            include 'core/HttpInput.class.php';
             
             new HttpInput($this->requestMethod);
 
@@ -367,11 +365,11 @@ class Router {
         
         if (!$this->admin) {
             
-            $viewName.= ".view.php";
+            $viewName.= ".view.twig";
         }
         else {
             
-            $viewName.= "-admin.view.php";
+            $viewName.= "-admin.view.twig";
         }
         
         return $viewName;
