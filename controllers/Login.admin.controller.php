@@ -3,6 +3,7 @@
 namespace Niuware\WebFramework\Controllers;
     
 use Niuware\WebFramework\Controller;
+use Niuware\WebFramework\HttpRequest;
 use Niuware\WebFramework\Auth;
 
 final class LoginAdmin extends Controller {

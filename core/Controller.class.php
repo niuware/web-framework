@@ -26,13 +26,7 @@ abstract class Controller {
     * Set default values for the controller
     */
     function __construct() { 
-
-        $this->title = DEFAULT_TITLE;
-        $this->styles = ['default' => ["main"]];
-        $this->js = [];
-        $this->cdn = [];
-        $this->metaTags = [];
-        $this->metaProps = [];
+        
         $this->renderer = DEFAULT_RENDERER;
 
         $this->authenticate = false;
@@ -63,80 +57,26 @@ abstract class Controller {
 
         $this->attributes[$name] = $value;
     }
-
-    /**
-    * Prints the Javascript HTML import tags
-    */
-    public function js() {
-
-        foreach ($this->js as $file) {
-
-            echo "\n\t\t";
-            echo '<script src="js/' . $file . '.js"></script>';
-
-        }
-    }
-
-    /**
-    * Prints the CDN URLs' HTML import tags  
-    */
-    public function cdn() {
-
-        foreach ($this->cdn as $url => $attributes) {
-
-            echo "\n\t\t";
-            echo '<script src="' . $url . '"';
-
-            foreach ($attributes as $attrib => $value) {
-
-                echo ' ' . $attrib . '="' . $value . '"';
-            }
-
-            echo '></script>';
-
-        }
-    }
-
-    /**
-    * Prints the meta tags (names and properties)  
-    */
-    public function metas() {
-
-        foreach($this->metaTags as $name => $content) {
-
-            echo '<meta name="' . $name . '" content="' . $content . '" />';
-            echo "\n\t\t";
-        }
-
-        foreach($this->metaProps as $property => $content) {
-
-            echo '<meta property="' . $property . '" content="' . $content . '" />';
-            echo "\n\t\t";
-        }
-    }
-
-    /**
-    * Prints the CSS files import tags  
-    */
-    public function styles() {
-
-        foreach ($this->styles as $path => $fileArray) {
-
-            foreach ($fileArray as $file) {
-
-                echo '<link rel="stylesheet" href="styles/' . $path . '/' . $file . '.css" />';
-                echo "\n\t\t";
-            }
-        }
-    }
     
     /**
      * Sets the renderer to use for the controller
      * @param string $renderer Should be either 'php' or 'twig'
      */
-    public function setRenderer(string $renderer = 'php') {
+    public function setRenderer(string $renderer = 'twig') {
         
-        $this->renderer = $renderer;
+        if ($renderer === 'twig' || $renderer === 'php') {
+            
+            $this->renderer = $renderer;
+        }
+    }
+    
+    /**
+     * Gets the renderer for the controller
+     * @return string Either 'php' or 'twig'
+     */
+    public function getRenderer() {
+        
+        return $this->renderer;
     }
 
     /**
@@ -148,7 +88,7 @@ abstract class Controller {
         
         if (!file_exists($pathToView . $this->view)) {
 
-            $this->view = "default.view.php";
+            $this->view = "default.twig.php";
         }
         
         if ($this->renderer === 'twig') {
@@ -157,7 +97,9 @@ abstract class Controller {
         }
         else {
             
-            include ($pathToView . $this->view);
+            $phpView = str_replace(".twig", ".php", $this->view);
+            
+            include ($pathToView . $phpView);
         }
     }
     
@@ -178,12 +120,10 @@ abstract class Controller {
         
         $twig = new \Twig_Environment($twigLoader, $rendererSettings);
         
-        $twigView = str_replace(".php", ".twig", $this->view);
-        
         $twig->addExtension(new \Twig_Extension_Debug());
         $twig->addExtension(new Extension());
         
-        echo $twig->render($twigView, $this->attributes);
+        echo $twig->render($this->view, $this->attributes);
     }
 
     /**
@@ -192,7 +132,7 @@ abstract class Controller {
      */
     public function renderDefault() {
         
-        $this->view = '404.view.php';
+        $this->view = '404.view.twig';
 
         HtmlResponse::getInstance()->render($this);
     }

@@ -38,11 +38,13 @@ final class Database {
             $capsule->addConnection([
                 'driver' => Settings::$databases['default']['engine'],
                 'host' => Settings::$databases['default']['host'],
+                'port' => Settings::$databases['default']['port'],
                 'database' => Settings::$databases['default']['schema'],
+                'prefix' => Settings::$databases['default']['prefix'],
                 'username' => Settings::$databases['default']['user'],
                 'password' => Settings::$databases['default']['pass'],
                 'charset' => Settings::$databases['default']['charset'],
-                'collation' => 'utf8_unicode_ci'
+                'collation' => Settings::$databases['default']['collation']
             ]);
 
             $capsule->bootEloquent();
