@@ -8,14 +8,9 @@
 */
 namespace Niuware\WebFramework;
 
-// Path to your settings file
-require 'etc/nwf/settings.php';
-require 'core/Autoloader.class.php';
-require 'vendor/autoload.php';
-
-spl_autoload_register(null, false);
-spl_autoload_extensions('.class.php .controller.php .model.php .api.php .admin.controller.php .helper.php');
-spl_autoload_register(__NAMESPACE__ . "\Autoloader::core");
+require_once 'core/Application.class.php';
 
 // Create the web application
 $app = Application::getInstance();
+
+$app->run();
