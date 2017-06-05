@@ -50,7 +50,7 @@ class Autoloader {
      */
     public static function api($class) {
 
-        $file = './api/' . strtolower(substr($class, strrpos($class, '\\') + 1));
+        $file = './app/api/' . strtolower(substr($class, strrpos($class, '\\') + 1));
 
         self::load($file . '.api.php');
     }
@@ -61,7 +61,7 @@ class Autoloader {
      */
     public static function controller($class) {
 
-        $file = './controllers/' . substr($class, strrpos($class, '\\') + 1);
+        $file = './app/controllers/' . substr($class, strrpos($class, '\\') + 1);
 
         self::load($file . '.controller.php');
     }
@@ -72,7 +72,7 @@ class Autoloader {
      */
     public static function model($class) {
 
-        $file = './models/' . substr($class, strrpos($class, '\\') + 1);
+        $file = './app/models/' . substr($class, strrpos($class, '\\') + 1);
 
         self::load($file . '.model.php');
     }
@@ -83,7 +83,7 @@ class Autoloader {
      */
     public static function controllerAdmin($class) {
 
-        $file = './controllers/' . substr($class, strrpos($class, '\\') + 1);
+        $file = './app/controllers/' . substr($class, strrpos($class, '\\') + 1);
         $file = str_replace('Admin', '', $file);
 
         self::load($file . '.admin.controller.php');
@@ -95,7 +95,7 @@ class Autoloader {
      */
     public static function helper($class) {
         
-        $file = './helpers/' . substr($class, strrpos($class, '\\') + 1);
+        $file = './app/helpers/' . substr($class, strrpos($class, '\\') + 1);
 
         self::load($file . '.helper.php');
     }

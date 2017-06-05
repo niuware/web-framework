@@ -84,7 +84,7 @@ abstract class Controller {
      */
     public function render() {
         
-        $pathToView = "./views/";
+        $pathToView = "./public/views/";
         
         if (!file_exists($pathToView . $this->view)) {
 
@@ -108,14 +108,15 @@ abstract class Controller {
      */
     public function renderWithTwig() {
         
-        $twigLoader = new \Twig_Loader_Filesystem('./views');
+        $twigLoader = new \Twig_Loader_Filesystem('./public/views');
         
-        $rendererSettings['cache'] = './cache';
+        $rendererSettings['cache'] = './app/cache';
         
         if (DEBUG_MODE === true) {
             
             $rendererSettings['debug'] = true;
             $rendererSettings['strict_variables'] = true;
+            $rendererSettings['auto_reload'] = true;
         }
         
         $twig = new \Twig_Environment($twigLoader, $rendererSettings);

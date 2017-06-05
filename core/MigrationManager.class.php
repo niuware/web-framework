@@ -69,8 +69,8 @@ final class MigrationManager {
         
         return [
             'paths' => [
-                'migrations' => 'migrations/migrations',
-                'seeds' => 'migrations/seeds'
+                'migrations' => 'app/migrations/migrations',
+                'seeds' => 'app/migrations/seeds'
             ],
             'migration_base_class' => 'Niuware\WebFramework\Migration',
             'environments' => [

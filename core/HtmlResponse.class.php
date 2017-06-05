@@ -40,11 +40,11 @@ final class HtmlResponse extends Response {
 
         if (!Auth::useAuth('admin')) {
 
-            include 'views/main-header.view.php';
+            include 'public/views/main-header.view.php';
         } 
         else {
 
-            include 'views/admin-header.view.php';
+            include 'public/views/admin-header.view.php';
         }
     }
     
@@ -55,11 +55,11 @@ final class HtmlResponse extends Response {
         
         if (!Auth::useAuth('admin')) {
 
-            include 'views/main-footer.view.php';    
+            include 'public/views/main-footer.view.php';    
         } 
         else {
 
-            include 'views/admin-footer.view.php';
+            include 'public/views/admin-footer.view.php';
         }
     }
     
