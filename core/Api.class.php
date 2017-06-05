@@ -35,6 +35,7 @@ final class Api {
         $this->errCode = "0x201";
         $this->exitFail = false;
         $this->requestMethod = $requestMethod;
+        $this->params = new HttpRequest();
     }
     
     /**

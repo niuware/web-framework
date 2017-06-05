@@ -1,13 +1,5 @@
-#
-#   File .htaccess
-#   Rewrite module configuration 
-#   Niuware WebFramework
-#
-
-Options +FollowSymLinks
-Options -Indexes
-IndexIgnore */*
-
+order deny,allow
+allow from all
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
@@ -21,8 +13,3 @@ IndexIgnore */*
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule . index.php
 </IfModule>
-
-#
-#   End of
-#   Niuware WebFramework
-#

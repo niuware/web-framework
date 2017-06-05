@@ -8,6 +8,11 @@
 * https://github.com/niuware/web-framework
 */
 namespace Niuware\WebFramework;
+
+// Path to your settings file
+require 'core/config/settings.php';
+require 'core/Autoloader.class.php';
+require 'vendor/autoload.php';
     
 /**
 * Executes the application processing the correct routing
@@ -40,14 +45,16 @@ final class Application {
      * Initializes the application
      */
     private function __construct() {
-
-        $this->initialize();
+        
+        spl_autoload_register(null, false);
+        spl_autoload_extensions('.class.php .controller.php .model.php .api.php .admin.controller.php .helper.php');
+        spl_autoload_register(__NAMESPACE__ . "\Autoloader::core");
     }
 
     /**
     * Calls all necessary methods to execute the application
     */
-    private function initialize() {
+    public function run() {
         
         Auth::start();
 
@@ -56,6 +63,21 @@ final class Application {
         $this->router = new Router();
 
         $this->start();
+    }
+    
+    /**
+    * Initialize the console mode
+    */
+    public function console() {
+        
+        $command = $_SERVER['argv'];
+        
+        if ($command !== null) {
+            
+            $console = new Console($command);
+
+            exit($console->getResult());
+        }
     }
 
     /**
@@ -110,6 +132,7 @@ final class Application {
 
         spl_autoload_register(__NAMESPACE__ . "\Autoloader::controller");
         spl_autoload_register(__NAMESPACE__ . "\Autoloader::model");
+        spl_autoload_register(__NAMESPACE__ . "\Autoloader::helper");
         
         if ($this->router->isAdmin()) {
             
