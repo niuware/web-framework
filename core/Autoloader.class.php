@@ -93,7 +93,7 @@ class Autoloader {
      * Registers the autoloading for helper classes
      * @param type $class Class to load
      */
-    public static function helpers($class) {
+    public static function helper($class) {
         
         $file = './helpers/' . substr($class, strrpos($class, '\\') + 1);
 
