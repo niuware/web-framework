@@ -9,8 +9,7 @@
 */
 namespace Niuware\WebFramework;
 
-// Path to your settings file
-require 'core/config/settings.php';
+require 'app/config/settings.php';
 require 'core/Autoloader.class.php';
 require 'vendor/autoload.php';
     

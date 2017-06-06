@@ -9,7 +9,7 @@
 */
 namespace Niuware\WebFramework;
 
-require_once 'config/routes.php';
+require_once 'app/config/routes.php';
 
 /**
 * Process the URL to the correct route
