@@ -10,10 +10,10 @@ namespace Niuware\WebFramework;
 
 /**
 * Configuration for the web application.
-* This file may contain secret API keys and database access passwords, 
-* so keep this file out of the public scope, for example:
-* {web-root}/etc/nwf/settings.php
+* This file may contain secret API keys and database access passwords
 */
+
+// Timezone
 date_default_timezone_set('UTC');
 
 // Routing
@@ -23,10 +23,12 @@ define(__NAMESPACE__ . '\BASE_URL',         'http://localhost/');
 define(__NAMESPACE__ . '\BASE_URL_SSL',     'https://localhost/');
 define(__NAMESPACE__ . '\BASE_URL_ADMIN',   'http://localhost/admin/');
 
+// Development and Production
+define(__NAMESPACE__ . '\DEBUG_MODE',           true);          // true|false
+define(__NAMESPACE__ . '\CONSOLE_MODE',         'terminal');    // disabled|enabled|terminal|web
+define(__NAMESPACE__ . '\DEFAULT_RENDERER',     'twig');        // twig|php
+
 // General
-define(__NAMESPACE__ . '\DEBUG_MODE',           true);
-define(__NAMESPACE__ . '\DEFAULT_RENDERER',     'twig');
-define(__NAMESPACE__ . '\SESSION_ID',           'e5f5d640');
 define(__NAMESPACE__ . '\HOMEPAGE',             'home');
 define(__NAMESPACE__ . '\HOMEPAGE_ADMIN',       'home');
 define(__NAMESPACE__ . '\DEFAULT_TITLE',        'Niuware WebFramework');

@@ -32,7 +32,7 @@ final class Auth {
      */
     public static function requireAuth(bool $value, string $mode = 'main') {
         
-        $_SESSION['nwf_auth_' . SESSION_ID . '_' . $mode . '_' . session_id()] = $value;
+        $_SESSION['nwf_auth_' . $mode . '_' . session_id()] = $value;
     }
     
     /**
@@ -42,7 +42,7 @@ final class Auth {
      */
     public static function useAuth(string $mode = 'main') : bool {
         
-        return $_SESSION['nwf_auth_' . SESSION_ID . '_' . $mode . '_' . session_id()] ?? false;
+        return $_SESSION['nwf_auth_' . $mode . '_' . session_id()] ?? false;
     }
     
     /**
@@ -52,7 +52,7 @@ final class Auth {
      */
     public static function verifiedAuth(string $mode = 'main') : bool {
         
-        return $_SESSION['nwf_auth_' . SESSION_ID . '_' . $mode . '_' . '_login_' . session_id()] ?? false;
+        return $_SESSION['nwf_auth_' . $mode . '_' . '_login_' . session_id()] ?? false;
     }
     
     /**
@@ -61,7 +61,7 @@ final class Auth {
      */
     public static function grantAuth(string $mode = 'main') {
         
-        $_SESSION['nwf_auth_' . SESSION_ID . '_' . $mode . '_' . '_login_' . session_id()] = true;
+        $_SESSION['nwf_auth_' . $mode . '_' . '_login_' . session_id()] = true;
     }
     
     /**
@@ -70,7 +70,7 @@ final class Auth {
      */
     public static function revokeAuth(string $mode = 'main') {
         
-        $_SESSION['nwf_auth_' . SESSION_ID . '_' . $mode . '_' . '_login_' . session_id()] = false;
+        $_SESSION['nwf_auth_' . $mode . '_' . '_login_' . session_id()] = false;
     }
     
     /**
@@ -81,7 +81,7 @@ final class Auth {
      */
     public static function add(string $name, $value, string $mode = 'main') {
         
-        $_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()] = $value;
+        $_SESSION['nwf_user_' . $mode . '_' . $name . '_' . session_id()] = $value;
     }
     
     /**
@@ -92,7 +92,7 @@ final class Auth {
      */
     public static function has(string $name, string $mode = 'main') {
         
-        return isset($_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+        return isset($_SESSION['nwf_user_' . $mode . '_' . $name . '_' . session_id()]);
     }
     
     /**
@@ -102,7 +102,7 @@ final class Auth {
      */
     public static function remove(string $name, string $mode = 'main') {
         
-        unset($_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+        unset($_SESSION['nwf_user_' . $mode . '_' . $name . '_' . session_id()]);
     }
     
     /**
@@ -115,7 +115,7 @@ final class Auth {
         
         if (self::has($name, $mode)) {
             
-            return $_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()];
+            return $_SESSION['nwf_user_' . $mode . '_' . $name . '_' . session_id()];
         }
         else {
             
@@ -130,7 +130,7 @@ final class Auth {
      */
     private static function destroyWithFilter($filter, $mode) {
         
-        $prefix = $filter . '_' . SESSION_ID . '_' . $mode . '_';
+        $prefix = $filter . '_' . $mode . '_';
         $prefixLength = strlen($prefix);
         
         foreach ($_SESSION as $var => $value) {

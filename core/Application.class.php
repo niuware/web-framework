@@ -69,13 +69,22 @@ final class Application {
     */
     public function console() {
         
-        $command = $_SERVER['argv'];
-        
-        if ($command !== null) {
-            
-            $console = new Console($command);
+        if (CONSOLE_MODE === 'terminal' || CONSOLE_MODE === 'enabled') {
 
-            exit($console->getResult());
+            $command = $_SERVER['argv'];
+
+            if ($command !== null) {
+
+                $console = new Console($command);
+
+                exit($console->getResult());
+            }
+        }
+        else {
+            
+            echo "Niuware WebFramework console is disabled.\n";
+            
+            exit;
         }
     }
 

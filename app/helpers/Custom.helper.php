@@ -6,7 +6,6 @@
 * GIT repository at:
 * https://github.com/niuware/web-framework
 */
-
 namespace Niuware\WebFramework\Helpers;
 
 trait Custom {
