@@ -115,7 +115,7 @@ final class Auth {
         
         if (self::has($name, $mode)) {
             
-            return isset($_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()]);
+            return $_SESSION['nwf_user_' . SESSION_ID . '_' . $mode . '_' . $name . '_' . session_id()];
         }
         else {
             

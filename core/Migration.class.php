@@ -9,12 +9,23 @@
 */
 namespace Niuware\WebFramework;
 
+if (!class_exists('\Phinx\Migration\AbstractMigration')) {
+    
+    die("ERROR: Add phinx to your composer.json file and run composer to use the Migration functionality.");
+}
+
 use Phinx\Migration\AbstractMigration;
 
+/**
+ * Base class for migration definition classes
+ */
 class Migration extends AbstractMigration {
 
     public $schema;
     
+    /**
+     * Initializes Eloquent engine
+     */
     public function init() {
         
         Database::boot();

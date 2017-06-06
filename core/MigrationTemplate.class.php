@@ -13,6 +13,9 @@ use Phinx\Migration\AbstractTemplateCreation;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Defines the migration definition class template
+ */
 final class MigrationTemplate extends AbstractTemplateCreation {
     
     public function __construct(InputInterface $input = null, OutputInterface $output = null) {
@@ -20,6 +23,10 @@ final class MigrationTemplate extends AbstractTemplateCreation {
         parent::__construct($input, $output);
     }
     
+    /**
+     * File template
+     * @return string
+     */
     public function getMigrationTemplate() {
         
         $template = 
@@ -50,6 +57,11 @@ EOD;
         return $template;
     }
     
-    public function postMigrationCreation($migrationFilename, $className, $baseClassName) {
-    }
+    /**
+     * Executes code after creating the migration definition file class
+     * @param type $migrationFilename
+     * @param type $className
+     * @param type $baseClassName
+     */
+    public function postMigrationCreation($migrationFilename, $className, $baseClassName) { }
 }

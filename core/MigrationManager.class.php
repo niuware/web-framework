@@ -20,6 +20,9 @@ use Phinx\Console\Command\SeedRun;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
+/**
+ * Executes migration commands
+ */
 final class MigrationManager {
     
     private $command;
@@ -38,11 +41,19 @@ final class MigrationManager {
         $this->initialize();
     }
     
+    /**
+     * Return command execution result
+     * @return string
+     */
     public function getResult() {
         
         return $this->result;
     }
     
+    /**
+     * Calls the command to execute
+     * @return null
+     */
     private function initialize() {
         
         if (in_array($this->command, $this->availableCommands)) {
@@ -65,6 +76,10 @@ final class MigrationManager {
         echo sprintf("The option '%s' for the command 'migrations' does not exist.\n", $this->command);
     }
     
+    /**
+     * Sets the configuration for the migration adapter
+     * @return array
+     */
     private function getConfig() {
         
         return [
@@ -88,6 +103,11 @@ final class MigrationManager {
         ];
     }
     
+    /**
+     * Sets the command arguments if exist
+     * @param array $command
+     * @param string $argumentShort
+     */
     private function setCommandArguments(&$command, $argumentShort = '-t') {
         
         if (count($this->commandArgs) > 2) {
@@ -100,6 +120,12 @@ final class MigrationManager {
         }
     }
     
+    /**
+     * Creates a migration definition class
+     * @param PhinxApplication $app
+     * @param Config $config
+     * @param Stream $stream
+     */
     private function create(PhinxApplication $app, Config $config, $stream) {
         
         $command = array(
@@ -119,6 +145,12 @@ final class MigrationManager {
         $create->run($arrayInput, new StreamOutput($stream));
     }
     
+    /**
+     * Executes the migration
+     * @param PhinxApplication $app
+     * @param Config $config
+     * @param Stream $stream
+     */
     private function migrate(PhinxApplication $app, Config $config, $stream) {
         
         $command = [
@@ -138,6 +170,12 @@ final class MigrationManager {
         $migrate->run($arrayInput, new StreamOutput($stream));
     }
     
+    /**
+     * Rollback a migration
+     * @param PhinxApplication $app
+     * @param Config $config
+     * @param Stream $stream
+     */
     private function rollback(PhinxApplication $app, Config $config, $stream) {
         
         $command = array(
@@ -146,10 +184,12 @@ final class MigrationManager {
         
         $this->setCommandArguments($command);
         
+        // Target date to rollback to
         $this->setCommandArguments($command, '-d');
         
         if (isset($command['-t']) && $command['-t'] === '0') {
             
+            // Force rollback
             if (isset($this->commandArgs[3]) && 
                     $this->commandArgs[3] === '-f') {
                 
@@ -168,6 +208,12 @@ final class MigrationManager {
         $migrate->run($arrayInput, new StreamOutput($stream));
     }
     
+    /**
+     * Shows the current migrations status
+     * @param PhinxApplication $app
+     * @param Config $config
+     * @param Stream $stream
+     */
     private function status(PhinxApplication $app, Config $config, $stream) {
         
         $command = array(
@@ -185,6 +231,12 @@ final class MigrationManager {
         $create->run($arrayInput, new StreamOutput($stream));
     }
     
+    /**
+     * Creates a seed migration definition class
+     * @param PhinxApplication $app
+     * @param Config $config
+     * @param Stream $stream
+     */
     private function seedcreate(PhinxApplication $app, Config $config, $stream) {
         
         $command = [
@@ -192,6 +244,7 @@ final class MigrationManager {
             'name' => 'Seed' . Security::generateToken(5)
         ];
         
+        // Sets an specific seed class name
         if (isset($this->commandArgs[1]) && $this->commandArgs[1] !== '') { 
             
             $command['name'] = $this->commandArgs[1];
@@ -208,12 +261,19 @@ final class MigrationManager {
         $migrate->run($arrayInput, new StreamOutput($stream));
     }
     
+    /**
+     * Runs a seed definition class
+     * @param PhinxApplication $app
+     * @param Config $config
+     * @param Stream $stream
+     */
     private function seedrun(PhinxApplication $app, Config $config, $stream) {
         
         $command = [
             'command' => 'seed:run'
         ];
         
+        // Target a specific seed class
         $this->setCommandArguments($command, '-s');
 
         if (isset($command['-s'])) {
