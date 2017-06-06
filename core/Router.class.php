@@ -157,6 +157,15 @@ class Router {
 
             return $this->setRequireAdminAuthMode();
         }
+        else if ($action == "console:nwf") {
+            
+            if (CONSOLE_MODE === 'web' || CONSOLE_MODE === 'enabled') {
+                
+                $console = new Console($this->path);
+
+                exit(nl2br($console->getResult()));
+            }
+        }
     }
     
     /**
