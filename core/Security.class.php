@@ -39,10 +39,53 @@ class Security {
      * Generates a cryptographic token
      * @return string Token
      */
-    public static function generateToken($length = 32) : string {
+    public static function generateToken(int $length = 32) : string {
         
         $bytes = random_bytes($length);
         
         return bin2hex($bytes);
+    }
+    
+    /**
+     * Sets the application csrf token
+     * @param string $data
+     * @return string
+     */
+    public static function getCsrfToken(string $data = null) : string {
+        
+        if (Auth::has('token', 'csrf') === false) {
+            
+            Auth::add('token', self::generateToken(), 'csrf');
+        }
+        
+        if (Auth::has('token2', 'csrf') === false) {
+            
+            Auth::add('token2', self::generateToken(), 'csrf');
+        }
+        
+        if ($data === null) {
+            
+            return Auth::get('token', 'csrf');
+        }
+        
+        return hash_hmac('sha256', $data, Auth::get('token2', 'csrf'));
+    }
+    
+    /**
+     * Verifies if the provided csrf token is valid
+     * @param string $token
+     * @param string $data
+     * @return bool
+     */
+    public static function verifyCsrfToken(string $token, string $data = null) : bool {
+        
+        if ($data === null) {
+            
+            return hash_equals(Auth::get('token', 'csrf'), $token);
+        }
+        
+        $hash = hash_hmac('sha256', $data, Auth::get('token2', 'csrf'));
+        
+        return hash_equals($hash, $token);
     }
 }
