@@ -289,8 +289,23 @@ class Router {
     public function getControllerInstance() : Controller {
 
         $controllerClass = "\Niuware\WebFramework\Controllers\\" . $this->controller;
+        
+        if (!class_exists($controllerClass)) {
+            
+            throw new \Exception("The controller class '" . $this->getControllerName() 
+                        . "' does not exist.", 106);
+        }
 
-        return new $controllerClass;
+        $controllerObject = new $controllerClass;
+        
+        if (is_object($controllerObject) && 
+                get_parent_class($controllerObject) == __NAMESPACE__ . '\Controller') {
+            
+            return $controllerObject;
+        }
+        
+        throw new \Exception("The controller class '" . $this->getControllerName() 
+                    . "' is not an instance of ". __NAMESPACE__ . "\Controller.", 104);
     }
 
     /**

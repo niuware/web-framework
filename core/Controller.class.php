@@ -87,8 +87,8 @@ abstract class Controller {
         $pathToView = "./public/views/";
         
         if (!file_exists($pathToView . $this->view)) {
-
-            $this->view = "default.twig.php";
+            
+            throw new \Exception("The view '$this->view' does not exist.", 106);
         }
         
         if ($this->renderer === 'twig') {
@@ -101,12 +101,14 @@ abstract class Controller {
             
             include ($pathToView . $phpView);
         }
+        
+        return;
     }
     
     /**
      * Renders the controller view using Twig Template Engine
      */
-    public function renderWithTwig() {
+    private function renderWithTwig() {
         
         $twigLoader = new \Twig_Loader_Filesystem('./public/views');
         
@@ -125,16 +127,5 @@ abstract class Controller {
         $twig->addExtension(new Extension());
         
         echo $twig->render($this->view, $this->attributes);
-    }
-
-    /**
-     * Renders the default view for any controller
-     * @return type
-     */
-    public function renderDefault() {
-        
-        $this->view = '404.view.twig';
-
-        HtmlResponse::getInstance()->render($this);
     }
 }

@@ -60,8 +60,15 @@ final class Application {
         $this->setLanguage();
 
         $this->router = new Router();
+        
+        try {
 
-        $this->start();
+            $this->start();
+        }
+        catch (FrameworkException $exception) {
+            
+            echo $exception->renderAll();
+        }
     }
     
     /**
@@ -115,19 +122,65 @@ final class Application {
             
             if (!method_exists($this->controller, $methodName)) {
                     
-                $methodName = 'renderDefault';
+                return $this->methodNotFound();
             }
         }
+        
+        return $this->executeController($methodName);
+    }
+    
+    /**
+     * Throws the method not found FrameworkException
+     * @throws FrameworkException
+     */
+    private function methodNotFound() {
+        
+        $rootMethodName = str_replace(['get', 'post'], '', $this->router->getControllerAction());
+        $reason = "";
+
+        if ($this->router->getRequestMethod() === 'get') {
+
+            $reason = "'get" . strtolower($rootMethodName) . "()' or 'get" . ucfirst($rootMethodName);
+        }
+        elseif ($this->router->getRequestMethod() === 'post') {
+
+            $reason = "'post" . strtolower($rootMethodName) . "()' or 'post" . ucfirst($rootMethodName);
+        }
+
+        throw new FrameworkException("There is no method called '$rootMethodName()' or " . $reason . "()'.", 100);
+    }
+    
+    /**
+     * Executes the method on the controller
+     * @param type $methodName
+     * @throws FrameworkException
+     */
+    private function executeController($methodName) {
         
         $reflection = new \ReflectionMethod($this->controller, $methodName);
         
         if ($reflection->isPublic()) {
-        
-            call_user_func([$this->controller, $methodName], $this->router->getControllerParams());
+            
+            try {
+                
+                $reflection->invoke($this->controller, $this->router->getControllerParams());
+            }
+            catch (\ReflectionException $exception) {
+                
+                throw new FrameworkException("Invocation of method '$methodName' failed.", 103, $exception);
+            }
+            catch (\Twig_Error_Runtime $exception) {
+                
+                throw new FrameworkException("Twig exception found when rendering '$methodName'().", 107, $exception);
+            }
+            catch (\Exception $exception) {
+                
+                throw new FrameworkException("Render of '$methodName' for the controller '{$this->router->getControllerName()}' failed.", 102, $exception);
+            }
         }
         else {
             
-            die("Error 0x105");
+            throw new FrameworkException("No callable method with the name '$methodName' was found.", 105);
         }
     }
 
@@ -149,27 +202,17 @@ final class Application {
 
         Database::boot();
 
-        $this->controller = $this->router->getControllerInstance();
-        
-        if (is_object($this->controller) && 
-                get_parent_class($this->controller) == __NAMESPACE__ . '\Controller') {
-        
-            $this->controller->view = $this->router->getDefaultView();
-
-            $this->loadController();
+        try {
             
-        } else {
-            
-            die("Error 0x104");
+            $this->controller = $this->router->getControllerInstance();
         }
-    }
+        catch (\Exception $exception) {
+            
+            throw new FrameworkException($exception->getMessage(), $exception->getCode());
+        }
+        
+        $this->controller->view = $this->router->getDefaultView();
 
-    /**
-    * Returns the called controller object instance
-    * @return Controller instance
-    */
-    public function controller() {
-
-        return $this->controller;
+        $this->loadController();
     }
 }
