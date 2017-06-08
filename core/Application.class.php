@@ -157,13 +157,13 @@ final class Application {
      */
     private function executeController($methodName) {
         
-        $reflection = new \ReflectionMethod($this->controller, $methodName);
+        $reflectionMethod = new \ReflectionMethod($this->controller, $methodName);
         
-        if ($reflection->isPublic()) {
+        if ($reflectionMethod->isPublic()) {
             
             try {
                 
-                $reflection->invoke($this->controller, $this->router->getControllerParams());
+                $reflectionMethod->invoke($this->controller, $this->router->getControllerParams());
             }
             catch (\ReflectionException $exception) {
                 

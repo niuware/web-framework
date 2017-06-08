@@ -104,13 +104,20 @@ final class Api {
 
         if (class_exists($this->className)) {
 
-            $obj = new $this->className;
+            $instance = new $this->className;
             
-            if ($this->verifyMethod($obj)) {
+            if (get_parent_class($instance) !== __NAMESPACE__ . '\ApiResponse' ) {
+                
+                $this->errCode = "0x204";
+                
+                return;
+            }
+            
+            if ($this->verifyMethod($instance)) {
                 
                 $this->error = false;
 
-                call_user_func([$obj, $this->methodName], $this->params);
+                call_user_func([$instance, $this->methodName], $this->params);
                 
             } else {
                 
