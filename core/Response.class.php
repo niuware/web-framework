@@ -10,8 +10,46 @@
 namespace Niuware\WebFramework;
 
 /**
- * Base class for a controller or API response
+ * Base class for a response
  */
-abstract class Response {
+final class Response {
     
+    private $data = [];
+
+    private $error = false;
+    
+    public function __get($name) {
+            
+        return $this->data[$name];
+    }
+    
+    public function __set($name, $value) {
+        
+        if ($name !== 'error') {
+            
+            $this->data[$name] = $value;
+        }
+        else {
+            
+            $this->error = $value;
+        }
+    }
+    
+    /**
+    * Gets the data
+    * @return mixed  
+    */
+    public function data() {
+        
+        return $this->data;
+    }
+    
+    /**
+     * Returns the current error status
+     * @return mixed
+     */
+    public function error() {
+        
+        return $this->error;
+    }
 }
