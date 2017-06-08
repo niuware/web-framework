@@ -52,4 +52,21 @@ final class Response {
         
         return $this->error;
     }
+    
+    /**
+     * Adds multiple values at once
+     * @param array $data
+     */
+    public function bulkAdd(array $data) {
+        
+        // Prevent error overwrite
+        $saveError = $this->error;
+        
+        foreach ($data as $key => $value) {
+            
+            $this->data[$key] = $value;
+        }
+        
+        $this->error = $saveError;
+    }
 }
