@@ -95,14 +95,16 @@ final class HttpRequest {
      */
     private function hasParameter($parameter, bool $emptyIsValid) {
         
-        if ($this->{$parameter} === null) {
+        $value = $this->{$parameter};
+        
+        if ($value === null) {
 
              return false;
         }
         
         if ($emptyIsValid === false) {
             
-            if (empty($this->{$parameter})) {
+            if (empty($value)) {
                 
                 return false;
             }
