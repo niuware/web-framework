@@ -57,10 +57,15 @@ final class Response {
      * Adds multiple values at once
      * @param array $data
      */
-    public function bulkAdd(array $data) {
+    public function add(array $data, bool $clear = false) {
         
         // Prevent error overwrite
         $saveError = $this->error;
+        
+        if ($clear === true) {
+            
+            $this->clear();
+        }
         
         foreach ($data as $key => $value) {
             
@@ -68,5 +73,33 @@ final class Response {
         }
         
         $this->error = $saveError;
+    }
+    
+    /**
+     * Removes multiple keys from the data array
+     * @param array $keys
+     */
+    public function remove(array $keys) {
+        
+        // Prevent error overwrite
+        $saveError = $this->error;
+        
+        foreach ($keys as $key) {
+            
+            if (isset($this->data[$key])) {
+
+                unset($this->data[$key]);
+            }
+        }
+        
+        $this->error = $saveError;
+    }
+    
+    /**
+     * Clears the data array
+     */
+    public function clear() {
+        
+        $this->data = [];
     }
 }

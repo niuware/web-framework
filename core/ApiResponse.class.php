@@ -14,6 +14,10 @@ namespace Niuware\WebFramework;
 */
 abstract class ApiResponse {
     
+    /**
+     * Gets the Response object
+     * @var Niuware\WebFramework\Response;
+     */
     public $response;
     
     public function __construct() {
