@@ -86,4 +86,63 @@ final class HttpRequest {
         
         return $this->headers;
     }
+    
+    /**
+     * Verifies if a request parameter is set
+     * @param type $parameter
+     * @param boolean $emptyIsValid
+     * @return boolean
+     */
+    private function hasParameter($parameter, bool $emptyIsValid) {
+        
+        if ($this->{$parameter} === null) {
+
+             return false;
+        }
+        
+        if ($emptyIsValid === false) {
+            
+            if (empty($this->{$parameter})) {
+                
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    /**
+     * Verifies if all request parameters are set
+     * @param array $parameters
+     * @param boolean $emptyIsValid
+     * @return boolean
+     */
+    private function hasParameters(array $parameters, bool $emptyIsValid) {
+        
+        foreach ($parameters as $parameter) {
+            
+            if (!$this->hasParameter($parameter, $emptyIsValid)) {
+                
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Verifies if request parameters are set
+     * @param mixed $value
+     * @param boolean $emptyIsValid If true, an empty string is considered as a value
+     * @return boolean
+     */
+    public function has($value, $emptyIsValid = true) {
+        
+        if (!is_array($value)) {
+            
+            return $this->hasParameter($value, $emptyIsValid);
+        }
+        
+        return $this->hasParameters($value, $emptyIsValid);
+    }
 }
