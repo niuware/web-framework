@@ -15,30 +15,34 @@ namespace Niuware\WebFramework;
 abstract class ApiResponse {
     
     /**
-     * Gets the Response object
+     * The Response object
      * @var Niuware\WebFramework\Response;
      */
     public $response;
     
-    public function __construct() {
-        
+    private $api;
+    
+    public function __construct(Api $api) {
+
         $this->response = new Response();
+        $this->api = $api;
     }
 
     /**
-    * Renders the JSON encoded response
-    * @param int $encode_constant Type of encoding for the json_encode PHP function
+     * Returns the endpoint response
+     * @param int $options Type of encoding for the json_encode PHP function
+     * @param int $depth
     */
-    protected function render($encode_constant = 0) {
-
+    protected function render($options = 0, $depth = 512) {
+        
         $response = [
 
             'data' => $this->response->data(),
             'error' => $this->response->error()
         ];
-
-        header('Content-Type: application/json; charset=utf-8');
-
-        echo json_encode($response, $encode_constant);
+        
+        $this->api->setOutputOptions($options, $depth);
+        
+        return $response;
     }
 }

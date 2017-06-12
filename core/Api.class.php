@@ -18,8 +18,6 @@ final class Api {
     private $error;
     
     private $errCode;
-    
-    private $errMessage = [];
 
     private $className;
     
@@ -30,12 +28,19 @@ final class Api {
     private $requestMethod;
     
     private $params;
+    
+    private $methodResponse;
+    
+    private $outputOpts;
+    
+    private $outputDepth;
 
     function __construct($requestMethod) {
         
         $this->error = true;
-        $this->exitFail = false;
         $this->requestMethod = $requestMethod;
+        $this->methodResponse = [];
+        $this->rendered = false;
         $this->params = new HttpRequest();
         
         register_shutdown_function(function() {
@@ -44,44 +49,50 @@ final class Api {
         });
     }
     
+    private function getDetailedError($error) {
+        
+        $output = [];
+        
+        $output['error'] = 'There was an unknown error in the execution of this endpoint.';
+
+        if (isset($error['message'])) {
+
+            $output['error'] = 'Error while executing the endpoint: ' . $this->className . ':' . $this->methodName;
+            $output['file'] = 'File: ' . $error['file']. ' at line ' . $error['line'];
+
+            $errorListRaw = explode("\n", $error['message']);
+            $errorList = [];
+
+            foreach ($errorListRaw as $err) {
+
+                $errorList[] = $err;
+            }
+
+            $output['trace'] = $errorList;
+        }
+        
+        return $output;
+    }
+    
     /**
-     * Renders the last triggered error by PHP. This will not render if a web framework
-     * error was found before.
+     * Renders the endpoint output as a JSON formatted string.
      * @param array $error
-     * @return string
      */
     private function shutdown($error) {
         
-        if ($this->errCode !== null) {
-            
-            return;
-        }
-        
-        $this->errMessage['error'] = 'There was an unknown error in the execution of this endpoint.';
-        $this->errCode = '0x205';
-        
         if (!empty($error)) {
             
+            $this->errCode = '0x205';
             $this->error = true;
-        
-            if (isset($error['message'])) {
-                
-                $this->errMessage['error'] = 'Error while executing the endpoint: ' . $this->className . ':' . $this->methodName;
-                $this->errMessage['file'] = 'File: ' . $error['file']. ' at line ' . $error['line'];
-
-                $errorListRaw = explode("\n", $error['message']);
-                $errorList = [];
-
-                foreach ($errorListRaw as $err) {
-
-                    $errorList[] = $err;
-                }
-
-                $this->errMessage['trace'] = $errorList;
-            }
+            
+            $output = $this->getDetailedError($error);
+        }
+        else {
+            
+            $output = $this->methodResponse;
         }
         
-        $this->response();
+        $this->response($output);
     }
     
     /**
@@ -115,8 +126,6 @@ final class Api {
         $this->load();
 
         $this->execute();
-
-        $this->response();
     }
 
     /**
@@ -134,12 +143,17 @@ final class Api {
     /**
     * Sends back a response if an error was generated
     */
-    private function response() {
+    private function response($output) {
 
+        header('Content-Type: application/json');
+        
         if ($this->error) {
-
-            header('Content-Type: application/json');
-            echo json_encode(array('error' => true, 'data' => array('errcode' => $this->errCode, 'error_message' => $this->errMessage)));
+            
+            echo json_encode(array('error' => true, 'data' => array('errcode' => $this->errCode, 'error_message' => $output)));
+        }
+        else {
+            
+            echo json_encode($output, $this->outputOpts, $this->outputDepth);
         }
     }
 
@@ -151,7 +165,7 @@ final class Api {
 
         if (class_exists($this->className)) {
 
-            $instance = new $this->className;
+            $instance = new $this->className($this);
             
             if (get_parent_class($instance) !== __NAMESPACE__ . '\ApiResponse' ) {
                 
@@ -164,7 +178,7 @@ final class Api {
                 
                 $this->error = false;
 
-                call_user_func([$instance, $this->methodName], $this->params);
+                $this->methodResponse = call_user_func([$instance, $this->methodName], $this->params);
                 
             } else {
                 
@@ -277,4 +291,14 @@ final class Api {
         }
     }
 
+    /**
+     * Sets the JSON output options (See PHP json_encode function)
+     * @param int $options
+     * @param int $depth
+     */
+    public function setOutputOptions($options, $depth) {
+        
+        $this->outputOpts = $options;
+        $this->outputDepth = $depth;
+    }
 }
