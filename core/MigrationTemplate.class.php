@@ -41,6 +41,9 @@ class \$className extends \$baseClassName
     /**
      * Illuminate\Database\Schema\Builder \$schema
      * Use the \$schema object to execute your migration queries
+     * 
+     * Migration comments:
+     * 
      */
     
     public function up()
