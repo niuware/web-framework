@@ -59,9 +59,10 @@ final class Api {
         
         $this->errMessage['error'] = 'There was an unknown error in the execution of this endpoint.';
         $this->errCode = '0x205';
-        $this->error = true;
         
         if (!empty($error)) {
+            
+            $this->error = true;
         
             if (isset($error['message'])) {
                 
