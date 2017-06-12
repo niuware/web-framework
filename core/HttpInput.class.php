@@ -42,10 +42,10 @@ final class HttpInput {
             }
             else {
                 
-                $postData = filter_input(INPUT_POST, 'params', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                $postData = filter_input_array(INPUT_POST);
             }
             
-            $api->postApi($postData);
+            $api->postApi($postData, $_FILES);
 
         } elseif ($requestMethod == "get") {
 

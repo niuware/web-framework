@@ -257,14 +257,14 @@ final class Api {
 
     /**
      * Executes a POST API call
-     * @param string $apiCall Name of the method to execute
      * @param array $params Method arguments
+     * @param array $files PHP $_FILES 
      */
-    public function postApi($params) {
+    public function postApi($params, $files = null) {
         
         if ($this->initialize()) {
             
-            $this->params = new HttpRequest($params);
+            $this->params = new HttpRequest($params, $files);
 
             $this->start();
         }
