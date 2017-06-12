@@ -18,6 +18,8 @@ final class Api {
     private $error;
     
     private $errCode;
+    
+    private $errMessage = [];
 
     private $className;
     
@@ -32,10 +34,53 @@ final class Api {
     function __construct($requestMethod) {
         
         $this->error = true;
-        $this->errCode = "0x201";
         $this->exitFail = false;
         $this->requestMethod = $requestMethod;
         $this->params = new HttpRequest();
+        
+        register_shutdown_function(function() {
+            
+            $this->shutdown(error_get_last());
+        });
+    }
+    
+    /**
+     * Renders the last triggered error by PHP. This will not render if a web framework
+     * error was found before.
+     * @param array $error
+     * @return string
+     */
+    private function shutdown($error) {
+        
+        if ($this->errCode !== null) {
+            
+            return;
+        }
+        
+        $this->errMessage['error'] = 'There was an unknown error in the execution of this endpoint.';
+        $this->errCode = '0x205';
+        $this->error = true;
+        
+        if (!empty($error)) {
+        
+            if (isset($error['message'])) {
+                
+                $this->errMessage['error'] = 'Error while executing the endpoint: ' . $this->className . ':' . $this->methodName;
+                $this->errMessage['file'] = 'File: ' . $error['file']. ' at line ' . $error['line'];
+
+                $errorListRaw = explode("\n", $error['message']);
+                $errorList = [];
+
+                foreach ($errorListRaw as $err) {
+
+                    $errorList[] = $err;
+                }
+
+                $this->errMessage['trace'] = $errorList;
+            }
+        }
+        
+        $this->response();
     }
     
     /**
@@ -93,7 +138,7 @@ final class Api {
         if ($this->error) {
 
             header('Content-Type: application/json');
-            echo json_encode(array('error' => true, 'data' => array('errcode' => $this->errCode)));
+            echo json_encode(array('error' => true, 'data' => array('errcode' => $this->errCode, 'error_message' => $this->errMessage)));
         }
     }
 
