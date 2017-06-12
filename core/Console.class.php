@@ -19,7 +19,16 @@ final class Console {
     
     private $result;
     
-    public function __construct($input) {
+    private $mode;
+    
+    public function __construct($input, $mode = 'terminal') {
+        
+        register_shutdown_function(function() {
+            
+            $this->shutdown(error_get_last());
+        });
+        
+        $this->mode = $mode;
         
         $this->initialize($input);
     }
@@ -27,6 +36,32 @@ final class Console {
     public function getResult() {
         
         return $this->result;
+    }
+    
+    private function shutdown($error) {
+        
+        if (!isset($error['message'])) {
+            
+            echo "There was an unknown error in the execution of your command.";
+            
+            return;
+        }
+        
+        if ($this->mode === 'web') {
+            
+            echo 'Error while executing the command: ' . $this->command . ':' . $this->commandOption . '<br />';
+            echo 'File: ' . $error['file']. ' at line ' . $error['line'];
+            echo "<br /><br />";
+            echo nl2br($error['message']);
+        }
+        else {
+            
+            echo 'Error while executing the command: ' . $this->command . ':' . $this->commandOption;
+            echo "\n";
+            echo 'File: ' . $error['file']. ' at line ' . $error['line'];
+            echo "\n\n";
+            echo $error['message'];
+        }
     }
     
     private function initialize($input) {

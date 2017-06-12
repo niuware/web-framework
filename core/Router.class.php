@@ -161,7 +161,7 @@ class Router {
             
             if (CONSOLE_MODE === 'web' || CONSOLE_MODE === 'enabled') {
                 
-                $console = new Console($this->path);
+                $console = new Console($this->path, 'web');
 
                 exit(nl2br($console->getResult()));
             }
