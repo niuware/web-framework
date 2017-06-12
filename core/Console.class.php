@@ -40,27 +40,32 @@ final class Console {
     
     private function shutdown($error) {
         
-        if (!isset($error['message'])) {
-            
-            echo "There was an unknown error in the execution of your command.";
-            
-            return;
-        }
+        if (isset($error['type']) && 
+                ($error['type'] === \E_ERROR || $error['type'] === \E_CORE_ERROR || 
+                $error['type'] === \E_COMPILE_ERROR || $error['type'] === \E_USER_ERROR)) {
         
-        if ($this->mode === 'web') {
-            
-            echo 'Error while executing the command: ' . $this->command . ':' . $this->commandOption . '<br />';
-            echo 'File: ' . $error['file']. ' at line ' . $error['line'];
-            echo "<br /><br />";
-            echo nl2br($error['message']);
-        }
-        else {
-            
-            echo 'Error while executing the command: ' . $this->command . ':' . $this->commandOption;
-            echo "\n";
-            echo 'File: ' . $error['file']. ' at line ' . $error['line'];
-            echo "\n\n";
-            echo $error['message'];
+            if (!isset($error['message'])) {
+
+                echo "There was an unknown error in the execution of your command.";
+
+                return;
+            }
+
+            if ($this->mode === 'web') {
+
+                echo 'Error while executing the command: ' . $this->command . ':' . $this->commandOption . '<br />';
+                echo 'File: ' . $error['file']. ' at line ' . $error['line'];
+                echo "<br /><br />";
+                echo nl2br($error['message']);
+            }
+            else {
+
+                echo 'Error while executing the command: ' . $this->command . ':' . $this->commandOption;
+                echo "\n";
+                echo 'File: ' . $error['file']. ' at line ' . $error['line'];
+                echo "\n\n";
+                echo $error['message'];
+            }
         }
     }
     
