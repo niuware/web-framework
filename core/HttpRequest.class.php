@@ -18,6 +18,8 @@ final class HttpRequest {
     
     private $attributes = [];
     
+    private $files = [];
+    
     /**
      * Gets a request property
      * @param string $name
@@ -43,11 +45,16 @@ final class HttpRequest {
         $this->attributes[$name] = $value;
     }
 
-    function __construct(array $params = null) { 
+    function __construct(array $params = null, $files = null) { 
         
         if ($params !== null) {
             
             $this->attributes = $params;
+        }
+        
+        if ($files !== null) {
+            
+            $this->files = $files;
         }
         
         $this->setHeaders();
@@ -146,5 +153,35 @@ final class HttpRequest {
         }
         
         return $this->hasParameters($value, $emptyIsValid);
+    }
+    
+    /**
+     * Verifies if a file exists
+     * @param type $file
+     * @return boolean
+     */
+    public function hasFile($file) {
+        
+        if (isset($this->files[$file])) {
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Gets a file
+     * @param type $file
+     * @return stdClass
+     */
+    public function getFile($file) : File {
+        
+        if (isset($this->files)) {   
+            
+            return new File($this->files[$file]);
+        }
+        
+        return null;
     }
 }
