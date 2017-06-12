@@ -135,10 +135,10 @@ final class HttpRequest {
     /**
      * Verifies if request parameters are set
      * @param mixed $value
-     * @param boolean $emptyIsValid If true, an empty string is considered as a value
+     * @param boolean $emptyIsValid If true, an empty string is considered as a valid value
      * @return boolean
      */
-    public function has($value, $emptyIsValid = true) {
+    public function has($value, $emptyIsValid = false) {
         
         if (!is_array($value)) {
             
