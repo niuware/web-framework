@@ -163,7 +163,9 @@ final class Application {
             
             try {
                 
-                $reflectionMethod->invoke($this->controller, $this->router->getControllerParams());
+                $redirectTo = $reflectionMethod->invoke($this->controller, $this->router->getControllerParams());
+                
+                $this->router->redirect($redirectTo);
             }
             catch (\ReflectionException $exception) {
                 
