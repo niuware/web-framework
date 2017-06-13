@@ -82,7 +82,12 @@ abstract class Controller {
     /**
      * Renders the view for the controller
      */
-    public function render() {
+    public function render($path = '') {
+        
+        if ($path !== '') {
+            
+            return $path;
+        }
         
         $pathToView = "./public/views/";
         
@@ -102,7 +107,7 @@ abstract class Controller {
             include ($pathToView . $phpView);
         }
         
-        return;
+        return null;
     }
     
     /**

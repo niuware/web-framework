@@ -398,4 +398,34 @@ class Router {
         
         return $viewName;
     }
+    
+    /**
+     * Redirects the browser to a path
+     * @param type $path
+     * @return type
+     */
+    public function redirect($path) {
+        
+        if ($path === null) {
+            
+            return;
+        }
+        
+        $redirectBaseUrl = BASE_URL;
+        $redirectPath = $path;
+        $container = 'main';
+        
+        if ($this->admin) {
+            
+            $container = 'admin';
+            $redirectBaseUrl = BASE_URL_ADMIN;
+        }
+            
+        if (isset(Routes::$views[$container])) {
+                
+            header("Location: " . $redirectBaseUrl . $redirectPath);
+
+            exit;
+        }
+    }
 }
