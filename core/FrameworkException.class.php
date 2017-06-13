@@ -69,6 +69,7 @@ final class FrameworkException extends \Exception {
 <html>
     <head>
         <title>Niuware WebFramework Exception Found</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
     </head>
     <body style="background-color:#fefefe;">
 EOD;
