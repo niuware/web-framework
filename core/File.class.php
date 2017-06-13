@@ -16,7 +16,7 @@ final class File {
     
     private $original_request = [];
     
-    private $filetype;
+    public $filetype;
     
     public function __construct($attributes = null) {
         
