@@ -14,15 +14,9 @@ namespace Niuware\WebFramework;
  */
 final class File {
     
-    private $name;
+    private $original_request = [];
     
-    private $tmp_name;
-    
-    private $error;
-    
-    private $size;
-    
-    private $type;
+    private $filetype;
     
     public function __construct($attributes = null) {
         
@@ -33,11 +27,18 @@ final class File {
         $this->set($attributes, 'size');
     }
     
-    private function set($array, $name) {
+    private function set($array, $name, $direct = false) {
+        
+        if ($direct === true) {
+        
+            $this->$name = $array[$name];
+            
+            return;
+        }
         
         if (isset($array[$name])) {
             
-            $this->{$name} = $array[$name];
+            $this->original_request[$name] = $array[$name];
         }
     }
     
@@ -47,6 +48,8 @@ final class File {
             
             return $this->$name;
         }
+        
+        return null;
     }
     
     /**
@@ -56,24 +59,23 @@ final class File {
      */
     private function getFilePath($path) {
         
-        $uploadPath = '';
         $subpath = 'other/';
         
         if ($path === 'auto') {
             
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             
-            $type = finfo_file($finfo, $this->tmp_name);
+            $this->filetype = finfo_file($finfo, $this->original_request['tmp_name']);
             
-            if (strpos($type, 'image') !== false) {
+            if (strpos($this->filetype, 'image') !== false) {
                 
                 $subpath = 'image/';
             }
-            elseif (strpos($type, 'video') !== false) {
+            elseif (strpos($this->filetype, 'video') !== false) {
                 
                 $subpath = 'video/';
             }
-            elseif (strpos($type, 'audio') !== false) {
+            elseif (strpos($this->filetype, 'audio') !== false) {
                 
                 $subpath = 'audio/';
             }
@@ -81,6 +83,11 @@ final class File {
             $uploadPath = 'public/assets/' . $subpath;
         }
         else {
+            
+            if (substr($path, -1) !== '/') {
+                
+                $path.= '/';
+            }
             
             $uploadPath = $path;
         }
@@ -111,24 +118,48 @@ final class File {
     }
     
     /**
+     * Updates the filename if necessary
+     * @param type $fileName
+     * @param type $realFileExtension
+     * @param type $realFileName
+     */
+    private function updateFileName(&$fileName, &$finalFileName, &$realFileExtension, &$realFileName) {
+        
+        if ($fileName !== '') {
+            
+            if ($fileName === 'unique') {
+                
+                $uniqueName = Security::generateToken();
+                
+                $finalFileName = $uniqueName . '.' . $realFileExtension;
+                $fileName = $uniqueName;
+            }
+            
+            $finalFileName = $fileName . '.' . $realFileExtension;
+            $realFileName = $fileName;
+        }
+    }
+    
+    /**
      * Moves a file to the destination path
-     * @param string $name
+     * @param string $fileName
      * @param string $path
      */
-    public function move($name = 'same', $path = 'auto') {
+    public function save($fileName = '', $path = 'auto') {
         
-        $fileName = $this->name;
+        if (empty($this->original_request['tmp_name'])) {
+            
+            return null;
+        }
+        
+        $finalFileName = $this->original_request['name'];
         
         $realFileName = '';
         $realFileExtension = '';
 
-        $this->getFileName($fileName, $realFileName, $realFileExtension);
+        $this->getFileName($finalFileName, $realFileName, $realFileExtension);
         
-        if ($name !== 'same' && !empty($name)) {
-            
-            $fileName = $name . '.' . $realFileExtension;
-            $realFileName = $name;
-        }
+        $this->updateFileName($fileName, $finalFileName, $realFileExtension, $realFileName);
         
         $uploadPath = $this->getFilePath($path);
         
@@ -140,15 +171,24 @@ final class File {
             }
         }
         
-        $filePath = $uploadPath . $fileName;
+        $filePath = $uploadPath . $finalFileName;
         
         if (file_exists($filePath)) {
             
-            $fileName = $realFileName . '_' . date('YmdHmss') . '.' . $realFileExtension;
+            $finalFileName = $realFileName . '_' . date('YmdHmss') . '.' . $realFileExtension;
             
-            $filePath = $uploadPath . $fileName;
+            $filePath = $uploadPath . $finalFileName;
         }
         
-        return move_uploaded_file($this->tmp_name, $filePath);
+        if(move_uploaded_file($this->original_request['tmp_name'], $filePath)) {
+            
+            $this->set(['filename' => $finalFileName], 'filename', true);
+            $this->set(['filepath' => $uploadPath], 'filepath', true);
+            $this->set(['filenameAndPath' => $filePath], 'filenameAndPath', true);
+            
+            return $this;
+        }
+        
+        return null;
     }
 }

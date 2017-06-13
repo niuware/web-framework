@@ -177,11 +177,11 @@ final class HttpRequest {
      */
     public function getFile($file) : File {
         
-        if (isset($this->files)) {   
+        if ($this->hasFile($file)) {   
             
             return new File($this->files[$file]);
         }
         
-        return null;
+        return new File();
     }
 }
