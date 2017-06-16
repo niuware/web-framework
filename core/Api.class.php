@@ -149,7 +149,7 @@ final class Api {
         
         if ($this->error) {
             
-            echo json_encode(array('error' => true, 'data' => array('errcode' => $this->errCode, 'error_message' => $output)));
+            echo json_encode(['error' => true, 'data' => ['errcode' => $this->errCode, 'error_message' => $output]]);
         }
         else {
             
@@ -280,7 +280,7 @@ final class Api {
             // Parse the query for the requested URL
             if (isset($this->currentUri['query'])) {
 
-                $params = array();
+                $params = [];
 
                 parse_str($this->currentUri['query'], $params);
 

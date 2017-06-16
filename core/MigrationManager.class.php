@@ -128,11 +128,11 @@ final class MigrationManager {
      */
     private function create(PhinxApplication $app, Config $config, $stream) {
         
-        $command = array(
+        $command = [
             'command' => 'create',
             'name' => 'V' . time(),
             '--class' => 'Niuware\WebFramework\MigrationTemplate'
-        );
+        ];
         
         $arrayInput = new ArrayInput($command);
         
@@ -178,9 +178,9 @@ final class MigrationManager {
      */
     private function rollback(PhinxApplication $app, Config $config, $stream) {
         
-        $command = array(
+        $command = [
             'command' => 'rollback'
-        );
+        ];
         
         $this->setCommandArguments($command);
         
@@ -216,9 +216,9 @@ final class MigrationManager {
      */
     private function status(PhinxApplication $app, Config $config, $stream) {
         
-        $command = array(
+        $command = [
             'command' => 'status'
-        );
+        ];
         
         $arrayInput = new ArrayInput($command);
         
