@@ -28,9 +28,9 @@ class Router {
     
     private $requestMethod = null;
     
-    private $queryString = array();
+    private $queryString = [];
     
-    private $postParams = array();
+    private $postParams = [];
 
     function __construct() {
 

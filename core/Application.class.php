@@ -23,7 +23,7 @@ final class Application {
 
     private $controller = null;
 
-    private $language = array();
+    private $language = [];
     
     /**
      * Returns the singleton for the class
