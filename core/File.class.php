@@ -186,6 +186,15 @@ final class File {
             $this->set(['filepath' => $uploadPath], 'filepath', true);
             $this->set(['filenameAndPath' => $filePath], 'filenameAndPath', true);
             
+            $publicUrl = "";
+            
+            if (strpos($filePath, 'public/') !== false) {
+                
+                $publicUrl = BASE_URL . $filePath;
+            }
+            
+            $this->set(['public_url' => $publicUrl], 'public_url', true);
+            
             return $this;
         }
         
