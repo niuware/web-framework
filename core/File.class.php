@@ -57,11 +57,13 @@ final class File {
      * @param type $path
      * @return type
      */
-    private function getFilePath($path) {
+    private function getFilePath($path, $mimeTypeSuffix) {
         
-        $subpath = 'other/';
+        $mimeTypePath = '';
         
-        if ($path === 'auto') {
+        if ($mimeTypeSuffix === true) {
+            
+            $subpath = 'other/';
             
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             
@@ -79,8 +81,11 @@ final class File {
                 
                 $subpath = 'audio/';
             }
+        }
+        
+        if ($path === 'auto') {
             
-            $uploadPath = 'public/assets/' . $subpath;
+            $uploadPath = 'public/assets/';
         }
         else {
             
@@ -91,6 +96,8 @@ final class File {
             
             $uploadPath = $path;
         }
+            
+        $uploadPath.= $mimeTypePath;
         
         return $uploadPath;
     }
@@ -145,7 +152,7 @@ final class File {
      * @param string $fileName
      * @param string $path
      */
-    public function save($fileName = '', $path = 'auto') {
+    public function save($fileName = '', $path = 'public', $mimeTypeSuffix = true) {
         
         if (empty($this->original_request['tmp_name'])) {
             
@@ -161,7 +168,7 @@ final class File {
         
         $this->updateFileName($fileName, $finalFileName, $realFileExtension, $realFileName);
         
-        $uploadPath = $this->getFilePath($path);
+        $uploadPath = $this->getFilePath($path, $mimeTypeSuffix);
         
         if (!file_exists($uploadPath)) {
 
