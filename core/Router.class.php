@@ -46,7 +46,7 @@ class Router {
         
         $this->setRequestMethod();
 
-        if (BASE_PATH == "/") {
+        if (BASE_PATH === '/') {
 
             $currentUri = substr(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL), 1);
         } else {
@@ -77,7 +77,7 @@ class Router {
         
         $queryString = filter_input(INPUT_SERVER, 'QUERY_STRING');
         
-        if ($queryString!= "") {
+        if ($queryString !== "") {
             
             parse_str($queryString, $this->queryString);
             
@@ -94,15 +94,19 @@ class Router {
         
         $requestMethod = filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD', FILTER_SANITIZE_URL);
         
-        if ($requestMethod == 'GET') {
+        if ($requestMethod === 'GET') {
             
             $this->requestMethod = 'get';
             
-        } elseif ($requestMethod == 'POST') {
+        } elseif ($requestMethod === 'POST') {
             
             $this->requestMethod = 'post';
             
             $this->postParams = filter_input_array(INPUT_POST);
+            
+        } elseif ($requestMethod === 'DELETE') {
+            
+            $this->requestMethod = 'delete';
         }
     }
 
@@ -146,18 +150,18 @@ class Router {
      */
     private function redirectTask($action) {
 
-        if ($action == "api") {
+        if ($action === 'api') {
             
             new HttpInput($this->requestMethod);
 
             exit;
 
         } 
-        else if ($action == "admin") {
+        else if ($action === 'admin') {
 
             return $this->setRequireAdminAuthMode();
         }
-        else if ($action == "console:nwf") {
+        else if ($action === 'console:nwf') {
             
             if (CONSOLE_MODE === 'web' || CONSOLE_MODE === 'enabled') {
                 
@@ -352,8 +356,7 @@ class Router {
             
         $allParams = array_merge($pathParams, $this->queryString);
         
-        if ($this->requestMethod == 'post' && 
-                $this->postParams != null) {
+        if ($this->requestMethod === 'post' && $this->postParams !== null) {
             
             $allParams = array_merge($allParams, $this->postParams);
         }
@@ -374,7 +377,7 @@ class Router {
      * Gets the request method
      * @return string
      */
-    public function getRequestMethod() : string {
+    public function getRequestMethod() {
         
         return $this->requestMethod;
     }

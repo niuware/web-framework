@@ -114,7 +114,16 @@ final class Application {
         
         $baseMethodName = str_replace(['-', '_'], '', $this->router->getControllerAction());
         
-        $methodName = $this->router->getRequestMethod() . $baseMethodName;
+        $methodPrefix = $this->router->getRequestMethod();
+        
+        if ($methodPrefix === null) {
+            
+            header('HTTP/1.0 405 Method Not Allowed');
+            
+            exit;
+        }
+        
+        $methodName = $methodPrefix . $baseMethodName;
         
         if (!method_exists($this->controller, $methodName)) {
             

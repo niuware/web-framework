@@ -14,12 +14,9 @@ namespace Niuware\WebFramework;
 */
 final class HttpInput {
 
-    function __construct(string $requestMethod) { 
-
-        if ($requestMethod != null) {
+    function __construct($requestMethod) { 
             
-            $this->initialize($requestMethod);
-        }
+        $this->initialize($requestMethod);
     }
 
     /**
@@ -30,7 +27,7 @@ final class HttpInput {
 
         $api = new Api($requestMethod);
         
-        if ($requestMethod == "post") {
+        if ($requestMethod === 'post' || $requestMethod === 'delete') {
                 
             $postData = null;
             
@@ -38,7 +35,7 @@ final class HttpInput {
             
             if (substr($contentType, 0, 16) == 'application/json') {
                 
-                $postData = json_decode(file_get_contents("php://input"), true);
+                $postData = json_decode(file_get_contents('php://input'), true);
             }
             else {
                 
@@ -47,9 +44,15 @@ final class HttpInput {
             
             $api->postApi($postData, $_FILES);
 
-        } elseif ($requestMethod == "get") {
+        } elseif ($requestMethod === 'get') {
 
             $api->getApi();
+        }
+        else {
+            
+            $api->unsupportedRequestMethod();
+            
+            exit;
         }
     }
 }

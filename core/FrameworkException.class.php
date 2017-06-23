@@ -114,7 +114,13 @@ EOD;
             Trace:
         </div>
 EOD;
-        $template.= nl2br($exception->getTraceAsString());
+        if (DEBUG_MODE === true) {
+            $template.= nl2br($exception->getTraceAsString());
+        }
+        else {
+            $template.= 'The trace is only visible when "debug mode" is enabled.';
+        }
+        
         $template.= '</div></div>';
         
         return $template;

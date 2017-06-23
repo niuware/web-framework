@@ -301,4 +301,12 @@ final class Api {
         $this->outputOpts = $options;
         $this->outputDepth = $depth;
     }
+    
+    /**
+     * Sets the error when the request method is not supported
+     */
+    public function unsupportedRequestMethod() {
+        
+        $this->errCode = "0x206";
+    }
 }
