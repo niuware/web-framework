@@ -48,6 +48,11 @@ final class Extension extends \Twig_Extension {
 
                 echo '<input type="hidden" name="csrf_token" value="' . Security::getCsrfToken($params) . '" />';
             });
+            
+            $functions[] = new \Twig_Function('url', function($url = null) {
+
+                echo BASE_URL . $url;
+            });
 
             return $functions;
         }
