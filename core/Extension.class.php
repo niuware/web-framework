@@ -49,9 +49,24 @@ final class Extension extends \Twig_Extension {
                 echo '<input type="hidden" name="csrf_token" value="' . Security::getCsrfToken($params) . '" />';
             });
             
-            $functions[] = new \Twig_Function('url', function($url = null) {
+            $functions[] = new \Twig_Function('url', function($url = null, $mode = 'main') {
+                
+                $modeReal = 'main';
+                $path = BASE_URL;
+                $fullPath = BASE_URL . HOMEPAGE;
+                
+                if ($mode === 'admin') {
+                    
+                    $modeReal = 'admin';
+                    $path = BASE_URL_ADMIN;
+                }
 
-                echo BASE_URL . $url;
+                if (isset(Routes::$views[$modeReal][$url])) {
+
+                    $fullPath = $path . $url;
+                }
+
+                echo $fullPath;
             });
 
             return $functions;
