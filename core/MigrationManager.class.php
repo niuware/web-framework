@@ -97,7 +97,9 @@ final class MigrationManager {
                     'name' => Settings::$databases['default']['schema'],
                     'user' => Settings::$databases['default']['user'],
                     'pass' => Settings::$databases['default']['pass'],
-                    'port' => Settings::$databases['default']['port']
+                    'port' => Settings::$databases['default']['port'],
+                    'charset' => Settings::$databases['default']['charset'],
+                    'collation' => Settings::$databases['default']['collation']
                 ]
             ]
         ];
