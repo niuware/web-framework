@@ -153,7 +153,20 @@ final class Api {
         }
         else {
             
-            echo json_encode($output, $this->outputOpts, $this->outputDepth);
+            $json = json_encode($output, $this->outputOpts, $this->outputDepth);
+            
+            if (function_exists('mb_strlen')) {
+                
+                $size = mb_strlen($json, '8bit');
+                
+            } else {
+                
+                $size = strlen($json);
+            }
+            
+            header('Content-length: ' . $size);
+            
+            echo $json;
         }
     }
 
