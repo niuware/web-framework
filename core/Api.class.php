@@ -132,10 +132,6 @@ final class Api {
     * Register the class Autoloader for an API call
     */
     private function load() {
-
-        spl_autoload_register(__NAMESPACE__ . "\Autoloader::api");
-        spl_autoload_register(__NAMESPACE__ . "\Autoloader::model");
-        spl_autoload_register(__NAMESPACE__ . "\Autoloader::helper");
         
         Database::boot();
     }
