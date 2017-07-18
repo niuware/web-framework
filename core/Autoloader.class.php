@@ -35,12 +35,32 @@ class Autoloader {
      * @param type $class Class or Interface to load
      */
     public static function core($class) {
+        
+        if (substr($class, 0, 20) !== __NAMESPACE__) {
+            
+            return;
+        }
+        
+        $baseNamespace = str_replace(__NAMESPACE__, '', $class);
+        
+        $last = strrpos($baseNamespace, '\\');
+        
+        $className = substr($class, strrpos($class, '\\') + 1);
+        
+        if ($last === 0) {
 
-        $file = './core/' . substr($class, strrpos($class, '\\') + 1);
+            $file = './core/' . $className;
 
-        if (!self::load($file . '.class.php')) {
-
-            self::load($file . '.interface.php');
+            self::load($file . '.class.php');
+        }
+        else {
+            
+            $subNamespace = lcfirst(substr($baseNamespace, 1, $last - 1));
+            
+            if (method_exists(get_called_class(), $subNamespace)) {
+            
+                self::$subNamespace($className);
+            }
         }
     }
 
@@ -48,9 +68,9 @@ class Autoloader {
      * Registers the autoloading for API classes
      * @param type $class Class to load
      */
-    public static function api($class) {
+    private static function api($class) {
 
-        $file = './app/api/' . strtolower(substr($class, strrpos($class, '\\') + 1));
+        $file = './app/api/' . $class;
 
         self::load($file . '.api.php');
     }
@@ -59,20 +79,23 @@ class Autoloader {
      * Registers the autoloading for controller classes
      * @param type $class Class to load
      */
-    public static function controller($class) {
+    private static function controllers($class) {
 
-        $file = './app/controllers/' . substr($class, strrpos($class, '\\') + 1);
+        $file = './app/controllers/' . $class;
 
-        self::load($file . '.controller.php');
+        if (!self::load($file . '.controller.php')) {
+            
+            self::controllerAdmin($class);
+        }
     }
 
     /**
      * Registers the autoloading for model classes
      * @param type $class Class to load
      */
-    public static function model($class) {
+    private static function models($class) {
 
-        $file = './app/models/' . substr($class, strrpos($class, '\\') + 1);
+        $file = './app/models/' . $class;
 
         self::load($file . '.model.php');
     }
@@ -81,9 +104,9 @@ class Autoloader {
      * Registers the autoloading for admin controller classes
      * @param type $class Class to load
      */
-    public static function controllerAdmin($class) {
+    private static function controllerAdmin($class) {
 
-        $file = './app/controllers/' . substr($class, strrpos($class, '\\') + 1);
+        $file = './app/controllers/' . $class;
         $file = str_replace('Admin', '', $file);
 
         self::load($file . '.admin.controller.php');
@@ -93,9 +116,9 @@ class Autoloader {
      * Registers the autoloading for helper classes
      * @param type $class Class to load
      */
-    public static function helper($class) {
+    private static function helpers($class) {
         
-        $file = './app/helpers/' . substr($class, strrpos($class, '\\') + 1);
+        $file = './app/helpers/' . $class;
 
         self::load($file . '.helper.php');
     }

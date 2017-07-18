@@ -202,15 +202,6 @@ final class Application {
     */
     private function start() {
 
-        spl_autoload_register(__NAMESPACE__ . "\Autoloader::controller");
-        spl_autoload_register(__NAMESPACE__ . "\Autoloader::model");
-        spl_autoload_register(__NAMESPACE__ . "\Autoloader::helper");
-        
-        if ($this->router->isAdmin()) {
-            
-            spl_autoload_register(__NAMESPACE__ . "\Autoloader::controllerAdmin");
-        }
-
         Database::boot();
 
         try {
