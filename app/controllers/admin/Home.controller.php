@@ -1,11 +1,11 @@
 <?php 
 
-namespace Niuware\WebFramework\Controllers;
+namespace Niuware\WebFramework\Controllers\Admin;
     
 use Niuware\WebFramework\Controller;
 use Niuware\WebFramework\HttpRequest;
 
-final class HomeAdmin extends Controller {
+final class Home extends Controller {
     
     public function getHome(HttpRequest $request) {
         

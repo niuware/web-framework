@@ -55,7 +55,7 @@ class Autoloader {
         }
         else {
             
-            $subNamespace = lcfirst(substr($baseNamespace, 1, $last - 1));
+            $subNamespace = str_replace('\\', '', lcfirst(substr($baseNamespace, 1, $last - 1)));
             
             if (method_exists(get_called_class(), $subNamespace)) {
             
@@ -82,11 +82,8 @@ class Autoloader {
     private static function controllers($class) {
 
         $file = './app/controllers/' . $class;
-
-        if (!self::load($file . '.controller.php')) {
-            
-            self::controllerAdmin($class);
-        }
+        
+        self::load($file . '.controller.php');
     }
 
     /**
@@ -104,12 +101,11 @@ class Autoloader {
      * Registers the autoloading for admin controller classes
      * @param type $class Class to load
      */
-    private static function controllerAdmin($class) {
+    private static function controllersAdmin($class) {
 
-        $file = './app/controllers/' . $class;
-        $file = str_replace('Admin', '', $file);
+        $file = './app/controllers/admin/' . $class;
 
-        self::load($file . '.admin.controller.php');
+        self::load($file . '.controller.php');
     }
     
     /**
