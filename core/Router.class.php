@@ -268,7 +268,7 @@ class Router {
 
         if (!Auth::verifiedAuth('admin')) {
 
-            $this->controller = "LoginAdmin";
+            $this->controller = "Login";
             $this->path[1] = "login";
 
         } else {
@@ -279,11 +279,9 @@ class Router {
                 
                 $this->controller = Routes::$views['admin'][$this->path[1]][0] ?? "";
             }
-            
-            $this->controller.= "Admin";
         }
 
-        $this->error = ($this->controller == "Admin");
+        $this->error = ($this->controller == "");
     }
 
     /**
@@ -292,7 +290,9 @@ class Router {
     */
     public function getControllerInstance() : Controller {
 
-        $controllerClass = "\Niuware\WebFramework\Controllers\\" . $this->controller;
+        $controllerClass = "\Niuware\WebFramework\Controllers\\";
+        $controllerClass.= ($this->admin === true) ? "Admin\\" : "";
+        $controllerClass.= $this->controller;
         
         if (!class_exists($controllerClass)) {
             
@@ -388,16 +388,15 @@ class Router {
      */
     public function getDefaultView() : string {
         
-        $viewName = $this->getControllerAction();
+        $viewName = '';
         
-        if (!$this->admin) {
+        if ($this->admin == true) {
             
-            $viewName.= ".view.twig";
+            $viewName = 'admin/';
         }
-        else {
-            
-            $viewName.= "-admin.view.twig";
-        }
+        
+        $viewName.= $this->getControllerAction();
+        $viewName.= '.view.twig';
         
         return $viewName;
     }
