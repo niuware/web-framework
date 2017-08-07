@@ -53,15 +53,20 @@ final class Extension extends \Twig_Extension {
                 
                 $modeReal = 'main';
                 $path = BASE_URL;
-                $fullPath = BASE_URL . HOMEPAGE;
+                $home = HOMEPAGE;
                 
                 if ($mode === 'admin') {
                     
                     $modeReal = 'admin';
                     $path = BASE_URL_ADMIN;
+                    $home = HOMEPAGE_ADMIN;
                 }
+                
+                $fullPath = $path . $home;
+                
+                $urlAction = explode('/', $url);
 
-                if (isset(Routes::$views[$modeReal][$url])) {
+                if (isset(Routes::$views[$modeReal][$urlAction[0]])) {
 
                     $fullPath = $path . $url;
                 }
