@@ -102,4 +102,28 @@ final class Response {
         
         $this->data = [];
     }
+    
+    /**
+     * Returns the response array (data and error)
+     * @return array
+     */
+    public function output() {
+        
+        $response = [
+
+            'data' => $this->data(),
+            'error' => $this->error()
+        ];
+        
+        return $response;
+    }
+    
+    /**
+     * Renders the output response as a 
+     * JSON string
+     */
+    public function render($options = 0, $depth = 512) {
+        
+        echo json_encode($this->output(), $options, $depth);
+    }
 }

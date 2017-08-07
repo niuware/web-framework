@@ -35,14 +35,8 @@ abstract class ApiResponse {
     */
     protected function render($options = 0, $depth = 512) {
         
-        $response = [
-
-            'data' => $this->response->data(),
-            'error' => $this->response->error()
-        ];
-        
         $this->api->setOutputOptions($options, $depth);
         
-        return $response;
+        return $this->response->output();
     }
 }
