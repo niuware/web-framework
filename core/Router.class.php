@@ -412,6 +412,12 @@ class Router {
             
             return;
         }
+        else if (is_a($path, __NAMESPACE__ . '\Response')) {
+            
+            $path->render();
+            
+            return;
+        }
         
         $redirectBaseUrl = BASE_URL;
         $redirectPath = $path;

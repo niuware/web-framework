@@ -33,6 +33,8 @@ final class FrameworkException extends \Exception {
         $html.= $this->getAll();
         $html.= $this->getFooter();
         
+        header('HTTP/1.0 500 Internal Server Error');
+        
         echo $html;
     }
     
