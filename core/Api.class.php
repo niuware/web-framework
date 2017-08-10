@@ -273,7 +273,7 @@ final class Api {
         
         if ($this->initialize()) {
             
-            $this->params = new HttpRequest($params, $files);
+            $this->params = new HttpRequest($params, $files, $this->currentUri);
 
             $this->start();
         }
@@ -293,7 +293,7 @@ final class Api {
 
                 parse_str($this->currentUri['query'], $params);
 
-                $this->params = new HttpRequest($params);
+                $this->params = new HttpRequest($params, null, $this->currentUri);
             }
 
             $this->start();

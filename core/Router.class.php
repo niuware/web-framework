@@ -31,6 +31,8 @@ class Router {
     private $queryString = [];
     
     private $postParams = [];
+    
+    private $currentUri = "";
 
     function __construct() {
 
@@ -48,13 +50,13 @@ class Router {
 
         if (BASE_PATH === '/') {
 
-            $currentUri = substr(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL), 1);
+            $this->currentUri = substr(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL), 1);
         } else {
 
-            $currentUri = str_replace('/' . BASE_PATH, '', filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
+            $this->currentUri = str_replace('/' . BASE_PATH, '', filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
         }
 
-        $this->path = explode('/', $currentUri);
+        $this->path = explode('/', $this->currentUri);
 
         $this->action = $this->path[0];
         
@@ -361,7 +363,7 @@ class Router {
             $allParams = array_merge($allParams, $this->postParams);
         }
         
-        return new HttpRequest($allParams);
+        return new HttpRequest($allParams, null, $this->currentUri);
     }
     
     /**
