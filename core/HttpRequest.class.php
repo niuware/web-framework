@@ -45,7 +45,7 @@ final class HttpRequest {
         $this->attributes[$name] = $value;
     }
 
-    function __construct(array $params = null, $files = null) { 
+    function __construct(array $params = null, $files = null, $requestUri = null) { 
         
         if ($params !== null) {
             
@@ -58,6 +58,9 @@ final class HttpRequest {
         }
         
         $this->setHeaders();
+        
+        $this->headers['Request-Path'] = $requestUri;
+        $this->headers['Request-Uri'] = BASE_URL . $requestUri;
     }
     
     /**
