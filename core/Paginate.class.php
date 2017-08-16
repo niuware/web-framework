@@ -42,6 +42,49 @@ final class Paginate {
     }
     
     /**
+     * Sets the pagination base URL
+     * @param string $uri
+     */
+    private function setUrl($uri) {
+        
+        $rawUrl = parse_url($uri);
+        $rawQuery = $rawUrl['query'];
+
+        $url = str_replace($rawQuery, '', $uri);
+
+        $query = preg_replace('/([\?|&]{0,1}p=\d*)/i', '', $rawQuery);
+
+        $hasQuery = false;
+
+        if (substr($url, -2) != '/?') {
+
+            if (substr($url, -1) != '/') {
+
+                $url.= '/';
+            }
+        }
+        else {
+            $hasQuery = true;
+        }
+
+        $this->url = $url . $query;
+
+        if ($query === '') { 
+
+            if ($hasQuery === false) {
+
+                $this->url.= '?';
+            }
+        }
+        else {
+
+            $this->url.= '&';
+        }
+
+        $this->url.= 'p=';
+    }
+    
+    /**
      * Generates the pagination
      * @param type $data
      * @param type $request
@@ -60,18 +103,8 @@ final class Paginate {
             }
 
             $this->previousPage = $this->currentPage - 1;
-            $this->url = preg_replace('/([\?|&]p=\d*)/i', '', $request->headers()['Request-Uri']);
             
-            if (strpos($this->url, '/?') === false) {
-                
-                $this->url.= '/?';
-            }
-            else {
-                
-                $this->url.= '&';
-            }
-            
-            $this->url.= 'p=';
+            $this->setUrl($request->headers()['Request-Uri']);
             
             if ($this->previousPage <= 0) {
                 
