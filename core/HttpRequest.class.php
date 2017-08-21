@@ -59,8 +59,18 @@ final class HttpRequest {
         
         $this->setHeaders();
         
-        $this->headers['Request-Path'] = $requestUri;
-        $this->headers['Request-Uri'] = BASE_URL . $requestUri;
+        $uri = $requestUri;
+        
+        if (is_array($requestUri)) {
+            
+            if (isset($requestUri['path'])) {
+                
+                $uri = $requestUri['path'];
+            }
+        }
+        
+        $this->headers['Request-Path'] = $uri;
+        $this->headers['Request-Uri'] = BASE_URL . $uri;
     }
     
     /**
