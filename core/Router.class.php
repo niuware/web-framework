@@ -30,8 +30,6 @@ class Router {
     
     private $queryString = [];
     
-    private $postParams = [];
-    
     private $currentUri = "";
 
     function __construct() {
@@ -104,8 +102,6 @@ class Router {
             
             $this->requestMethod = 'post';
             
-            $this->postParams = filter_input_array(INPUT_POST);
-            
         } elseif ($requestMethod === 'DELETE') {
             
             $this->requestMethod = 'delete';
@@ -154,7 +150,9 @@ class Router {
 
         if ($action === 'api') {
             
-            new HttpInput($this->requestMethod);
+            $input = new HttpInput($this->requestMethod);
+            
+            $input->withApi();
 
             exit;
 
@@ -358,12 +356,19 @@ class Router {
             
         $allParams = array_merge($pathParams, $this->queryString);
         
-        if ($this->requestMethod === 'post' && $this->postParams !== null) {
+        $postParams = null;
+        $postFiles = null;
+        
+        $input = new HttpInput($this->requestMethod);
+        
+        $input->parse($postParams, $postFiles);
+        
+        if ($this->requestMethod === 'post' && $postParams !== null) {
             
-            $allParams = array_merge($allParams, $this->postParams);
+            $allParams = array_merge($allParams, $postParams);
         }
         
-        return new HttpRequest($allParams, null, $this->currentUri);
+        return new HttpRequest($allParams, $postFiles, $this->currentUri);
     }
     
     /**
