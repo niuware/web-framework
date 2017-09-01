@@ -13,38 +13,59 @@ namespace Niuware\WebFramework;
 * Process an HTTP request
 */
 final class HttpInput {
+    
+    private $requestMethod;
 
-    function __construct($requestMethod) { 
-            
-        $this->initialize($requestMethod);
+    function __construct($requestMethod) {
+        
+        $this->requestMethod = $requestMethod;
+    }
+    
+    /**
+     * Parses a POST or DELETE input
+     * @param array $data
+     * @param array $files
+     */
+    public function parse(&$data, &$files) {
+        
+        $data = null;
+        $files = null;
+        
+        if ($this->requestMethod === 'post' || $this->requestMethod === 'delete') {
+
+            $contentType = filter_input(INPUT_SERVER, 'CONTENT_TYPE');
+
+            if (substr($contentType, 0, 16) == 'application/json') {
+
+                $data = json_decode(file_get_contents('php://input'), true);
+            }
+            else {
+
+                $data = filter_input_array(INPUT_POST);
+            }
+
+            $files = $_FILES;
+        }
     }
 
     /**
     * Instantiate a new API class object to execute an 
     * API call, depending on the type of HTTP requested method
     */
-    private function initialize($requestMethod) {
+    public function withApi() {
 
-        $api = new Api($requestMethod);
+        $api = new Api($this->requestMethod);
         
-        if ($requestMethod === 'post' || $requestMethod === 'delete') {
-                
-            $postData = null;
+        if ($this->requestMethod === 'post' || $this->requestMethod === 'delete') {
             
-            $contentType = filter_input(INPUT_SERVER, 'CONTENT_TYPE');
+            $data = null;
+            $files = null;
             
-            if (substr($contentType, 0, 16) == 'application/json') {
-                
-                $postData = json_decode(file_get_contents('php://input'), true);
-            }
-            else {
-                
-                $postData = filter_input_array(INPUT_POST);
-            }
+            $this->parse($data, $files);
             
-            $api->postApi($postData, $_FILES);
+            $api->postApi($data, $files);
 
-        } elseif ($requestMethod === 'get') {
+        } elseif ($this->requestMethod === 'get') {
 
             $api->getApi();
         }
