@@ -1,3 +1,5 @@
+Options -Indexes
+
 order deny,allow
 allow from all
 <IfModule mod_rewrite.c>
