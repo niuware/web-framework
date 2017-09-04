@@ -192,6 +192,7 @@ final class File {
             $this->set(['filename' => $finalFileName], 'filename', true);
             $this->set(['filepath' => $uploadPath], 'filepath', true);
             $this->set(['filenameAndPath' => $filePath], 'filenameAndPath', true);
+            $this->set(['extension' => $realFileExtension], 'extension', true);
             
             $publicUrl = "";
             
