@@ -207,4 +207,37 @@ final class File {
         
         return null;
     }
+    
+    /**
+     * Deletes a file from disk
+     * @param string $file Path of the file
+     * @return boolean Delete success
+     */
+    public function delete($file) {
+        
+        $path = str_replace(\Niuware\WebFramework\BASE_URL, '', $file);
+        
+        $defaultPath = 'public/assets/' . $file;
+
+        if (file_exists($path)) {
+
+            unlink($path);
+            
+            return true;
+        }
+        else if (file_exists($file)) {
+            
+            unlink($file);
+            
+            return true;
+        }
+        else if (file_exists($defaultPath)) {
+                
+            unlink($defaultPath);
+            
+            return true;
+        }
+        
+        return false;
+    }
 }
