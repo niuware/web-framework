@@ -39,7 +39,7 @@ final class Extension extends \Twig_Extension {
 
                 $functions[] = new \Twig_Function($method->name, function() use ($class, $method) { 
 
-                                    return $class->{$method->name}(func_get_args()[0]);
+                                    return $class->{$method->name}(func_get_args());
 
                                 });
             }
@@ -98,9 +98,9 @@ final class Extension extends \Twig_Extension {
 
             foreach ($methods as $method) {
 
-                $functions[] = new \Twig_Filter($method->name, function($params = []) use ($class, $method) { 
+                $functions[] = new \Twig_Filter($method->name, function() use ($class, $method) { 
 
-                                    return $class->{$method->name}($params);
+                                    return $class->{$method->name}(func_get_args());
 
                                 });
             }
