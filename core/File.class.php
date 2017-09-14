@@ -215,7 +215,12 @@ final class File {
      * @param string $file Path of the file
      * @return boolean Delete success
      */
-    public function delete($file) {
+    public function delete($file = '') {
+        
+        if (empty($file)) {
+            
+            return false;
+        }
         
         $path = str_replace(\Niuware\WebFramework\BASE_URL, '', $file);
         
