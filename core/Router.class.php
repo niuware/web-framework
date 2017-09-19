@@ -21,6 +21,8 @@ class Router {
     private $controller;
 
     private $action;
+    
+    private $adminPath;
 
     private $error = true;
 
@@ -68,6 +70,11 @@ class Router {
             $this->error = false;
 
         } else {
+            
+            if (isset($this->path[1])) {
+                
+                $this->adminPath = str_replace("/", "", parse_url($this->path[1], \PHP_URL_PATH));
+            }
 
             $this->redirectTask($this->path[0]);
         }
@@ -277,7 +284,7 @@ class Router {
             
             if (isset($this->path[1])) {
                 
-                $this->controller = Routes::$views['admin'][$this->path[1]][0] ?? "";
+                $this->controller = Routes::$views['admin'][$this->adminPath][0] ?? "";
             }
         }
 
@@ -333,7 +340,7 @@ class Router {
         }
         else {
             
-            return $this->path[1];
+            return $this->adminPath;
         }
     }
 
