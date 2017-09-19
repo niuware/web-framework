@@ -22,6 +22,25 @@ final class HttpInput {
     }
     
     /**
+     * Parse POST or DELETE input data
+     */
+    private function methodParse() {
+        
+        if ($this->requestMethod === 'delete') {
+            
+            $result = [];
+
+            parse_str(file_get_contents('php://input'), $result);
+            
+            return $result;
+        }
+        else {
+
+            return filter_input_array(INPUT_POST);
+        }
+    }
+    
+    /**
      * Parses a POST or DELETE input
      * @param array $data
      * @param array $files
@@ -40,8 +59,8 @@ final class HttpInput {
                 $data = json_decode(file_get_contents('php://input'), true);
             }
             else {
-
-                $data = filter_input_array(INPUT_POST);
+                
+                $data = $this->methodParse();
             }
 
             $files = $_FILES;
