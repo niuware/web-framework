@@ -370,7 +370,7 @@ class Router {
         
         $input->parse($postParams, $postFiles);
         
-        if ($this->requestMethod === 'post' && $postParams !== null) {
+        if (($this->requestMethod === 'post' || $this->requestMethod === 'delete') && $postParams !== null) {
             
             $allParams = array_merge($allParams, $postParams);
         }
