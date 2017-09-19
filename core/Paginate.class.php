@@ -48,7 +48,7 @@ final class Paginate {
     private function setUrl($uri) {
         
         $rawUrl = parse_url($uri);
-        $rawQuery = $rawUrl['query'];
+        $rawQuery = $rawUrl['query'] ?? "";
 
         $url = str_replace($rawQuery, '', $uri);
 
@@ -150,7 +150,7 @@ final class Paginate {
      */
     public function previousLink($label = '&lt;', $itemClass = 'page-item', $linkClass = 'page-link') {
         
-        $html.= '<li class="' . $itemClass . '">';
+        $html = '<li class="' . $itemClass . '">';
         $html.= '<a class="' . $linkClass . '" href="';
         $html.= $this->url . $this->previousPage . '"';
         $html.= ($this->currentPage == 1) ? ' style="cursor:default;"' : '';
@@ -171,7 +171,7 @@ final class Paginate {
      */
     public function nextLink($label = '&gt;', $itemClass = 'page-item', $linkClass = 'page-link') {
         
-        $html.= '<li class="' . $itemClass . '">';
+        $html = '<li class="' . $itemClass . '">';
         $html.= '<a class="' . $linkClass . '" href="';
         $html.= $this->url . $this->nextPage . '"';
         $html.= ($this->currentPage == $this->totalPages) ? ' style="cursor:default;"' : '';
