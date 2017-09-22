@@ -22,7 +22,7 @@ class Router {
 
     private $action;
     
-    private $adminPath;
+    private $adminPath = null;
 
     private $error = true;
 
@@ -276,13 +276,13 @@ class Router {
         if (!Auth::verifiedAuth('admin')) {
 
             $this->controller = "Login";
-            $this->path[1] = "login";
+            $this->adminPath = "login";
 
         } else {
 
             $this->controller = "";
             
-            if (isset($this->path[1])) {
+            if ($this->adminPath !== null) {
                 
                 $this->controller = Routes::$views['admin'][$this->adminPath][0] ?? "";
             }
