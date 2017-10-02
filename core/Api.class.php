@@ -160,7 +160,7 @@ final class Api {
                 $size = strlen($json);
             }
             
-            header('Content-length: ' . $size);
+            header('Content-Length: ' . $size);
             
             echo $json;
         }
