@@ -29,6 +29,7 @@ final class Paginate {
         $this->nextPage = 1;
         $this->url = '';
         $this->totalPages = 1;
+        $this->renderedItemsMax = 8;
     }
     
     public function __get($name) {
@@ -123,6 +124,115 @@ final class Paginate {
     }
     
     /**
+     * Renders the HTML code for a pagination item
+     * @param type $i
+     * @param type $itemClass
+     * @param type $activeClass
+     * @param type $linkClass
+     * @return string
+     */
+    private function renderItem($i, $itemClass, $activeClass, $linkClass) {
+        
+        $html = '<li class="' . $itemClass . ' ';
+        $html.= ($i == $this->currentPage) ? $activeClass : '';
+        $html.= '">';
+        $html.= '<a class="' . $linkClass . '" href="';
+        $html.= $this->url . $i;
+        $html.= '">' . $i . '</a></li>';
+        
+        return $html;
+    }
+    
+    /**
+     * Renders the HTML code for a pagination ellipsis item
+     * @param type $itemClass
+     * @param type $linkClass
+     * @return string
+     */
+    private function renderEllipsisItem($itemClass, $linkClass) {
+
+        $html = '<li class="' . $itemClass . '">';
+        $html.= '<a class="' . $linkClass . '"';
+        $html.= '">...</a></li>';
+        
+        return $html;
+    }
+    
+    /**
+     * Renders the HTML code for a pagination with clipping mode
+     * @param type $itemClass
+     * @param type $activeClass
+     * @param type $linkClass
+     * @return string
+     */
+    private function renderWithClipping($itemClass, $activeClass, $linkClass) {
+        
+        $start = 1;
+        $end = $this->totalPages;
+        $itemsToRender = $this->renderedItemsMax;
+
+        $this->calculateClippingIndexes($start, $end, $itemsToRender);
+
+        $html = $this->renderItem(1, $itemClass, $activeClass, $linkClass);
+
+        if ($this->currentPage > $itemsToRender) {
+
+            if (($start - 1) == 2) {
+                
+                $html.= $this->renderItem(2, $itemClass, $activeClass, $linkClass);
+            }
+            else {
+                
+                $html.= $this->renderEllipsisItem($itemClass, $linkClass);
+            }
+        }
+
+        for ($i = $start; $i <= $end; $i++) {
+
+            $html.= $this->renderItem($i, $itemClass, $activeClass, $linkClass);
+        }
+
+        if ($end < $this->totalPages) {
+
+            if (($end + 1) != $this->totalPages) {
+                
+                $html.= $this->renderEllipsisItem($itemClass, $linkClass);
+            }
+            
+            $html.= $this->renderItem($this->totalPages, $itemClass, $activeClass, $linkClass);
+        }
+        
+        return $html;
+    }
+    
+    /**
+     * Calculate the indexes for rendering the pagination HTML code
+     * @param type $start
+     * @param type $end
+     * @param type $itemsToRender
+     */
+    private function calculateClippingIndexes(&$start, &$end, &$itemsToRender) {
+        
+        $startOffset = 3;
+        $itemsToRender = $this->renderedItemsMax - $startOffset;
+        $startTemp = ($this->currentPage == 1) ? 2 : $this->currentPage;
+        $end = (($this->currentPage + $itemsToRender) > $this->totalPages) ? $this->totalPages : ($this->currentPage + $itemsToRender);
+
+        if (($end - $startTemp) < $itemsToRender) {
+
+            $startTemp-= ($itemsToRender - ($end - $startTemp));
+        }
+
+        $startTemp1 = (($startTemp - $startOffset) < 1) ? 2 : ($startTemp - $startOffset);
+        $start = ($startTemp1 > $this->totalPages) ? $startTemp1 + $startOffset : $startTemp1;
+
+        if (($end - $start) < $this->renderedItemsMax) {
+
+            $end+= ($this->renderedItemsMax - ($end - $start)) - 1;
+        }
+    }
+    
+    /**
      * Paginates the data
      * @param Illuminate\Database\Eloquent\Collection $data
      * @param HttpRequest $request
@@ -195,14 +305,23 @@ final class Paginate {
         
         $html = $this->previousLink($previousLabel, $itemClass, $linkClass, $activeClass);
         
-        for ($i = 1; $i <= $this->totalPages; $i++) {
+        $useClipping = false;
+        
+        if ($this->totalPages > $this->renderedItemsMax) {
             
-            $html.= '<li class="' . $itemClass . ' ';
-            $html.= ($i == $this->currentPage) ? $activeClass : '';
-            $html.= '">';
-            $html.= '<a class="' . $linkClass . '" href="';
-            $html.= $this->url . $i;
-            $html.= '">' . $i . '</a></li>';
+            $useClipping = true;
+        }
+        
+        if ($useClipping === false) {
+        
+            for ($i = 1; $i <= $this->totalPages; $i++) {
+                
+                $html.= $this->renderItem($i, $itemClass, $activeClass, $linkClass);
+            }
+        }
+        else {
+            
+            $html.= $this->renderWithClipping($itemClass, $activeClass, $linkClass);
         }
         
         $html.= $this->nextLink($nextLabel, $itemClass, $linkClass, $activeClass);
