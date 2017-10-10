@@ -20,7 +20,14 @@ final class Response {
     
     public function __get($name) {
             
-        return $this->data[$name];
+        if ($name !== 'error') {
+            
+            return $this->data[$name];
+        }
+        else {
+            
+            return $this->error;
+        }
     }
     
     public function __set($name, $value) {
