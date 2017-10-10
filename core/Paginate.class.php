@@ -96,7 +96,9 @@ final class Paginate {
 
         if ($this->totalPages > 1) {
             
-            $this->currentPage = (isset($request->p)) ? $request->p : 1;
+            $page = $request->p;
+            
+            $this->currentPage = (isset($page)) ? $page : 1;
             
             if ($this->currentPage > $this->totalPages) {
                 
