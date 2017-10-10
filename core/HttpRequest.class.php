@@ -113,7 +113,7 @@ final class HttpRequest {
      * @param boolean $emptyIsValid
      * @return boolean
      */
-    private function hasParameter($parameter, bool $emptyIsValid) {
+    private function hasParameter($parameter, $emptyIsValid) {
         
         $value = $this->{$parameter};
         
@@ -139,7 +139,7 @@ final class HttpRequest {
      * @param boolean $emptyIsValid
      * @return boolean
      */
-    private function hasParameters(array $parameters, bool $emptyIsValid) {
+    private function hasParameters(array $parameters, $emptyIsValid) {
         
         foreach ($parameters as $parameter) {
             
@@ -186,9 +186,9 @@ final class HttpRequest {
     /**
      * Gets a file
      * @param type $file
-     * @return stdClass
+     * @return File
      */
-    public function getFile($file) : File {
+    public function getFile($file) {
         
         if ($this->hasFile($file)) {   
             

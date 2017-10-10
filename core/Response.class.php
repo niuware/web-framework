@@ -57,7 +57,7 @@ final class Response {
      * Adds multiple values at once
      * @param array $data
      */
-    public function add(array $data, bool $clear = false) {
+    public function add(array $data, $clear = false) {
         
         // Prevent error overwrite
         $saveError = $this->error;
