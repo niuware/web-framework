@@ -136,7 +136,7 @@ class Router {
     * Verify if the controller requires user login
     * @return bool Login required?
     */
-    private function requireLogin() : bool {
+    private function requireLogin() {
 
         $requireLogin = false;
 
@@ -284,7 +284,7 @@ class Router {
             
             if ($this->adminPath !== null) {
                 
-                $this->controller = Routes::$views['admin'][$this->adminPath][0] ?? "";
+                $this->controller = (isset(Routes::$views['admin'][$this->adminPath][0])) ? Routes::$views['admin'][$this->adminPath][0] : "";
             }
         }
 
@@ -295,7 +295,7 @@ class Router {
     * Returns a new instance of the requested controller
     * @return Controller instance
     */
-    public function getControllerInstance() : Controller {
+    public function getControllerInstance() {
 
         $controllerClass = "\Niuware\WebFramework\Controllers\\";
         $controllerClass.= ($this->admin === true) ? "Admin\\" : "";
@@ -348,7 +348,7 @@ class Router {
      * Gets the parameters for the current method (Uri query)
      * @return array
      */
-    public function getControllerParams() : HttpRequest {
+    public function getControllerParams() {
         
         $pathParams = [];
 
@@ -382,7 +382,7 @@ class Router {
      * Returns true if the current routing requires admin validation
      * @return bool
      */
-    public function isAdmin() : bool {
+    public function isAdmin() {
         
         return $this->admin;
     }
@@ -400,7 +400,7 @@ class Router {
      * Gets a default view name based on the requested path
      * @return string
      */
-    public function getDefaultView() : string {
+    public function getDefaultView() {
         
         $viewName = '';
         

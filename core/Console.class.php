@@ -71,8 +71,8 @@ final class Console {
     
     private function initialize($input) {
         
-        $this->command = $input[1] ?? null;
-        $this->commandOption = $input[2] ?? null;
+        $this->command = (isset($input[1])) ? $input[1] : null;
+        $this->commandOption = (isset($input[2])) ? $input[2] : null;
         
         if ($this->command === null) {
             

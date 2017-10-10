@@ -19,7 +19,7 @@ class Security {
      * @param string $toHash String to hash
      * @return string Hashed string
      */
-    public static function hash(string $toHash) : string {
+    public static function hash($toHash) {
         
         return password_hash($toHash, \PASSWORD_DEFAULT);
     }
@@ -30,7 +30,7 @@ class Security {
      * @param string $fromHash Hash to compare to
      * @return bool
      */
-    public static function verifyHash(string $source, string $fromHash) : bool {
+    public static function verifyHash($source, $fromHash) {
         
         return password_verify($source, $fromHash);
     }
@@ -39,7 +39,7 @@ class Security {
      * Generates a cryptographic token
      * @return string Token
      */
-    public static function generateToken(int $length = 32) : string {
+    public static function generateToken($length = 32) {
         
         $bytes = random_bytes($length);
         
@@ -51,7 +51,7 @@ class Security {
      * @param string $data
      * @return string
      */
-    public static function getCsrfToken(string $data = null) : string {
+    public static function getCsrfToken($data = null) {
         
         if (Auth::has('token', 'csrf') === false) {
             
@@ -77,7 +77,7 @@ class Security {
      * @param string $data
      * @return bool
      */
-    public static function verifyCsrfToken(string $token, string $data = null) : bool {
+    public static function verifyCsrfToken($token, $data = null) {
         
         if ($data === null) {
             

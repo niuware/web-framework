@@ -62,7 +62,7 @@ abstract class Controller {
      * Sets the renderer to use for the controller
      * @param string $renderer Should be either 'php' or 'twig'
      */
-    public function setRenderer(string $renderer = 'twig') {
+    public function setRenderer($renderer = 'twig') {
         
         if ($renderer === 'twig' || $renderer === 'php') {
             

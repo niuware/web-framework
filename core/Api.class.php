@@ -99,7 +99,7 @@ final class Api {
      * Sets the requested configuration for the API call
      * @return bool
      */
-    private function initialize() : bool {
+    private function initialize() {
         
         $this->currentUri = parse_url(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
 
@@ -205,7 +205,7 @@ final class Api {
      * @param type $obj API class object
      * @return bool
      */
-    private function verifyMethod(&$obj) : bool {
+    private function verifyMethod(&$obj) {
         
         $baseMethodName = $this->methodName;
         $this->methodName = $this->requestMethod . $baseMethodName;
@@ -235,7 +235,7 @@ final class Api {
     * @param string $customPath The path to parse
     * @return array Split URL
     */
-    private function actionPath($customPath = "") : array {
+    private function actionPath($customPath = "") {
 
         $currentPath = $customPath;
 

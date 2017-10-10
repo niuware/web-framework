@@ -64,7 +64,7 @@ final class Database {
      * @param type $tableName Table name from which the instance will be generated
      * @return type
      */
-    static function table($tableName) : Builder {
+    static function table($tableName) {
         
         return Capsule::table($tableName);
     }

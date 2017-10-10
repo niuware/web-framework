@@ -30,7 +30,7 @@ final class Auth {
      * @param bool $value   
      * @param string $mode  Type of session (either 'main', or 'admin')
      */
-    public static function requireAuth(bool $value, string $mode = 'main') {
+    public static function requireAuth($value, $mode = 'main') {
         
         $_SESSION['nwf_auth_' . $mode . '_' . session_id()] = $value;
     }
@@ -40,9 +40,14 @@ final class Auth {
      * @param string $mode Type of session (either 'main', or 'admin')
      * @return bool
      */
-    public static function useAuth(string $mode = 'main') : bool {
+    public static function useAuth($mode = 'main') {
         
-        return $_SESSION['nwf_auth_' . $mode . '_' . session_id()] ?? false;
+        if (isset($_SESSION['nwf_auth_' . $mode . '_' . session_id()])) {
+            
+            return $_SESSION['nwf_auth_' . $mode . '_' . session_id()];
+        }
+        
+        return false;
     }
     
     /**
@@ -50,16 +55,21 @@ final class Auth {
      * @param string $mode Type of session (either 'main', or 'admin')
      * @return bool
      */
-    public static function verifiedAuth(string $mode = 'main') : bool {
+    public static function verifiedAuth($mode = 'main') {
         
-        return $_SESSION['nwf_auth_' . $mode . '_' . '_login_' . session_id()] ?? false;
+        if (isset($_SESSION['nwf_auth_' . $mode . '_' . '_login_' . session_id()])) {
+            
+            return $_SESSION['nwf_auth_' . $mode . '_' . '_login_' . session_id()];
+        }
+        
+        return false;
     }
     
     /**
      * Sets the user authentication to true
      * @param string $mode Type of session (either 'main', or 'admin')
      */
-    public static function grantAuth(string $mode = 'main') {
+    public static function grantAuth($mode = 'main') {
         
         $_SESSION['nwf_auth_' . $mode . '_' . '_login_' . session_id()] = true;
     }
@@ -68,7 +78,7 @@ final class Auth {
      * Sets the user authentication to false
      * @param string $mode Type of session (either 'main', or 'admin')
      */
-    public static function revokeAuth(string $mode = 'main') {
+    public static function revokeAuth($mode = 'main') {
         
         $_SESSION['nwf_auth_' . $mode . '_' . '_login_' . session_id()] = false;
     }
@@ -79,7 +89,7 @@ final class Auth {
      * @param type $value
      * @param type $mode Type of session (either 'main', or 'admin')
      */
-    public static function add(string $name, $value, string $mode = 'main') {
+    public static function add($name, $value, $mode = 'main') {
         
         $_SESSION['nwf_user_' . $mode . '_' . $name . '_' . session_id()] = $value;
     }
@@ -90,7 +100,7 @@ final class Auth {
      * @param type $mode Type of session (either 'main', or 'admin')
      * @return type
      */
-    public static function has(string $name, string $mode = 'main') {
+    public static function has($name, $mode = 'main') {
         
         return isset($_SESSION['nwf_user_' . $mode . '_' . $name . '_' . session_id()]);
     }
@@ -100,7 +110,7 @@ final class Auth {
      * @param string $name
      * @param type $mode Type of session (either 'main', or 'admin')
      */
-    public static function remove(string $name, string $mode = 'main') {
+    public static function remove($name, $mode = 'main') {
         
         unset($_SESSION['nwf_user_' . $mode . '_' . $name . '_' . session_id()]);
     }
@@ -111,7 +121,7 @@ final class Auth {
      * @param type $mode Type of session (either 'main', or 'admin')
      * @return type
      */
-    public static function get(string $name, string $mode = 'main') {
+    public static function get($name, $mode = 'main') {
         
         if (self::has($name, $mode)) {
             
@@ -146,7 +156,7 @@ final class Auth {
      * Destroys all user custom session variables
      * @param type $mode Type of session (either 'main', or 'admin')
      */
-    public static function destroy(string $mode = 'main') {
+    public static function destroy($mode = 'main') {
         
         self::destroyWithFilter('nwf_user', $mode);
     }
@@ -155,7 +165,7 @@ final class Auth {
      * Destroys all user custom and authentication session variables
      * @param type $mode Type of session (either 'main', or 'admin')
      */
-    public static function end(string $mode = 'main') {
+    public static function end($mode = 'main') {
         
         self::destroyWithFilter('nwf_user', $mode);
         self::destroyWithFilter('nwf_auth', $mode);

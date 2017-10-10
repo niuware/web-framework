@@ -49,7 +49,7 @@ final class Paginate {
     private function setUrl($uri) {
         
         $rawUrl = parse_url($uri);
-        $rawQuery = $rawUrl['query'] ?? "";
+        $rawQuery = (isset($rawUrl['query'])) ? $rawUrl['query'] : "";
 
         $url = str_replace($rawQuery, '', $uri);
 
@@ -96,7 +96,7 @@ final class Paginate {
 
         if ($this->totalPages > 1) {
             
-            $this->currentPage = $request->p ?? 1;
+            $this->currentPage = (isset($request->p)) ? $request->p : 1;
             
             if ($this->currentPage > $this->totalPages) {
                 
