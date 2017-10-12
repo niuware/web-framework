@@ -6,7 +6,7 @@
 * GIT repository at:
 * https://github.com/niuware/web-framework
 */
-namespace Niuware\WebFramework\Helpers;
+namespace App\Helpers;
 
 class TwigFunctions {
     

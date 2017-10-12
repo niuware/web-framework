@@ -116,7 +116,7 @@ EOD;
             Trace:
         </div>
 EOD;
-        if (DEBUG_MODE === true) {
+        if (\App\Config\DEBUG_MODE === true) {
             $template.= nl2br($exception->getTraceAsString());
         }
         else {

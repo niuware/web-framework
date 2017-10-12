@@ -9,6 +9,8 @@
 */
 namespace Niuware\WebFramework;
 
+use App\Config\Settings;
+
 use Phinx\Console\PhinxApplication;
 use Phinx\Config\Config;
 use Phinx\Console\Command\Create;

@@ -76,7 +76,7 @@ final class Application {
     */
     public function console() {
         
-        if (CONSOLE_MODE === 'terminal' || CONSOLE_MODE === 'enabled') {
+        if (\App\Config\CONSOLE_MODE === 'terminal' || \App\Config\CONSOLE_MODE === 'enabled') {
 
             $command = $_SERVER['argv'];
 
@@ -100,7 +100,7 @@ final class Application {
     */
     private function setLanguage($lang = 'default') {
 
-        $this->language = Settings::$languages[$lang];
+        $this->language = \App\Config\Settings::$languages[$lang];
 
         define(__NAMESPACE__ . "\BASE_LANG", $this->language['prefix']);
         define(__NAMESPACE__ . "\DB_LANG", $this->language['db_prefix']);

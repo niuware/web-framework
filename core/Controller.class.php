@@ -27,7 +27,7 @@ abstract class Controller {
     */
     function __construct() { 
         
-        $this->renderer = DEFAULT_RENDERER;
+        $this->renderer = \App\Config\DEFAULT_RENDERER;
 
         $this->authenticate = false;
         $this->isAdmin = false;
@@ -119,7 +119,7 @@ abstract class Controller {
         
         $rendererSettings['cache'] = './app/cache';
         
-        if (DEBUG_MODE === true) {
+        if (\App\Config\DEBUG_MODE === true) {
             
             $rendererSettings['debug'] = true;
             $rendererSettings['strict_variables'] = true;

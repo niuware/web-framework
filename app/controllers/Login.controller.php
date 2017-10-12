@@ -1,6 +1,6 @@
 <?php 
 
-namespace Niuware\WebFramework\Controllers;
+namespace App\Controllers;
     
 use Niuware\WebFramework\Controller;
 use Niuware\WebFramework\HttpRequest;

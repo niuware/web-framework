@@ -199,7 +199,7 @@ final class File {
             
             if (strpos($filePath, 'public/') !== false) {
                 
-                $publicUrl = BASE_URL . $filePath;
+                $publicUrl = \App\Config\BASE_URL . $filePath;
             }
             
             $this->set(['public_url' => $publicUrl], 'public_url', true);
@@ -222,7 +222,7 @@ final class File {
             return false;
         }
         
-        $path = str_replace(\Niuware\WebFramework\BASE_URL, '', $file);
+        $path = str_replace(\App\Config\BASE_URL, '', $file);
         
         $defaultPath = 'public/assets/' . $file;
 

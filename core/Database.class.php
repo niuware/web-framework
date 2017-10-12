@@ -9,6 +9,7 @@
 */
 namespace Niuware\WebFramework;
 
+use App\Config\Settings;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Query\Builder;
     

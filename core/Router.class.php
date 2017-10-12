@@ -11,6 +11,8 @@ namespace Niuware\WebFramework;
 
 require_once 'app/config/routes.php';
 
+use App\Config\Routes;
+
 /**
 * Process the URL to the correct route
 */
@@ -48,12 +50,12 @@ class Router {
         
         $this->setRequestMethod();
 
-        if (BASE_PATH === '/') {
+        if (\App\Config\BASE_PATH === '/') {
 
-            $this->currentUri = substr(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL), 1);
+            $this->currentUri = substr(filter_input(\App\Config\SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL), 1);
         } else {
 
-            $this->currentUri = str_replace('/' . BASE_PATH, '', filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
+            $this->currentUri = str_replace('/' . \App\Config\BASE_PATH, '', filter_input(\App\Config\SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
         }
 
         $this->path = explode('/', $this->currentUri);
@@ -99,7 +101,7 @@ class Router {
      */
     private function setRequestMethod() {
         
-        $requestMethod = filter_input(SERVER_ENV_VAR, 'REQUEST_METHOD', FILTER_SANITIZE_URL);
+        $requestMethod = filter_input(\App\Config\SERVER_ENV_VAR, 'REQUEST_METHOD', FILTER_SANITIZE_URL);
         
         if ($requestMethod === 'GET') {
             
@@ -170,7 +172,7 @@ class Router {
         }
         else if ($action === 'console:nwf') {
             
-            if (CONSOLE_MODE === 'web' || CONSOLE_MODE === 'enabled') {
+            if (\App\Config\CONSOLE_MODE === 'web' || \App\Config\CONSOLE_MODE === 'enabled') {
                 
                 $console = new Console($this->path, 'web');
 
@@ -231,7 +233,7 @@ class Router {
         
         if (!empty(Routes::$views['main'])) {
                     
-            header("Location: " . BASE_URL . HOMEPAGE);
+            header("Location: " . \App\Config\BASE_URL . \App\Config\HOMEPAGE);
             
             exit;
         }
@@ -244,7 +246,7 @@ class Router {
         
         if (!empty(Routes::$views['admin'])) {
                     
-            header("Location: " . BASE_URL_ADMIN . HOMEPAGE_ADMIN);
+            header("Location: " . \App\Config\BASE_URL_ADMIN . \App\Config\HOMEPAGE_ADMIN);
             
             exit;
         }
@@ -297,7 +299,7 @@ class Router {
     */
     public function getControllerInstance() {
 
-        $controllerClass = "\Niuware\WebFramework\Controllers\\";
+        $controllerClass = "\App\Controllers\\";
         $controllerClass.= ($this->admin === true) ? "Admin\\" : "";
         $controllerClass.= $this->controller;
         
@@ -433,14 +435,14 @@ class Router {
             return;
         }
         
-        $redirectBaseUrl = BASE_URL;
+        $redirectBaseUrl = \App\Config\BASE_URL;
         $redirectPath = $path;
         $container = 'main';
         
         if ($this->admin) {
             
             $container = 'admin';
-            $redirectBaseUrl = BASE_URL_ADMIN;
+            $redirectBaseUrl = \App\Config\BASE_URL_ADMIN;
         }
             
         if (isset(Routes::$views[$container])) {
