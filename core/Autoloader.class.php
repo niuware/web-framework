@@ -36,32 +36,47 @@ class Autoloader {
      */
     public static function core($class) {
         
-        if (substr($class, 0, 20) !== __NAMESPACE__) {
-            
-            return;
-        }
+        if (substr($class, 0, 20) === __NAMESPACE__) {
         
-        $baseNamespace = str_replace(__NAMESPACE__, '', $class);
-        
-        $last = strrpos($baseNamespace, '\\');
-        
-        $className = substr($class, strrpos($class, '\\') + 1);
-        
-        if ($last === 0) {
+            $baseNamespace = str_replace(__NAMESPACE__, '', $class);
 
-            $file = './core/' . $className;
+            $last = strrpos($baseNamespace, '\\');
 
-            self::load($file . '.class.php');
+            $className = substr($class, strrpos($class, '\\') + 1);
+
+            if ($last === 0) {
+
+                $file = './core/' . $className;
+
+                self::load($file . '.class.php');
+            }
         }
         else {
             
+            $baseNamespace = str_replace('App', '', $class);
+            
+            $last = strrpos($baseNamespace, '\\');
+            
             $subNamespace = str_replace('\\', '', lcfirst(substr($baseNamespace, 1, $last - 1)));
+            
+            $className = substr($class, strrpos($class, '\\') + 1);
             
             if (method_exists(get_called_class(), $subNamespace)) {
             
                 self::$subNamespace($className);
             }
         }
+    }
+    
+    /**
+     * Registers the autoloading for configuration classes
+     * @param type $class Class to load
+     */
+    private static function config($class) {
+
+        $file = './app/config/' . $class;
+
+        self::load($file . '.php');
     }
 
     /**

@@ -4,5 +4,5 @@ namespace Niuware\WebFramework;
 
 final class Helper {
     
-    use Helpers\Custom;
+    use \App\Helpers\Custom;
 }

@@ -1,6 +1,6 @@
 <?php 
 
-namespace Niuware\WebFramework\Controllers\Admin;
+namespace App\Controllers\Admin;
     
 use Niuware\WebFramework\Controller;
 use Niuware\WebFramework\HttpRequest;

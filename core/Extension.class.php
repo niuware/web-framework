@@ -25,9 +25,9 @@ final class Extension extends \Twig_Extension {
      */
     public function getFunctions() {
         
-        if (class_exists('Niuware\WebFramework\Helpers\TwigFunctions')) {
+        if (class_exists('\App\Helpers\TwigFunctions')) {
         
-            $reflectionClass = new \ReflectionClass('Niuware\WebFramework\Helpers\TwigFunctions');
+            $reflectionClass = new \ReflectionClass('\App\Helpers\TwigFunctions');
 
             $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
@@ -52,21 +52,21 @@ final class Extension extends \Twig_Extension {
             $functions[] = new \Twig_Function('url', function($url = null, $mode = 'main') {
                 
                 $modeReal = 'main';
-                $path = BASE_URL;
-                $home = HOMEPAGE;
+                $path = \App\Config\BASE_URL;
+                $home = \App\Config\HOMEPAGE;
                 
                 if ($mode === 'admin') {
                     
                     $modeReal = 'admin';
-                    $path = BASE_URL_ADMIN;
-                    $home = HOMEPAGE_ADMIN;
+                    $path = \App\Config\BASE_URL_ADMIN;
+                    $home = \App\Config\HOMEPAGE_ADMIN;
                 }
                 
                 $fullPath = $path . $home;
                 
                 $urlAction = explode('/', $url);
 
-                if (isset(Routes::$views[$modeReal][$urlAction[0]])) {
+                if (isset(\App\Config\Routes::$views[$modeReal][$urlAction[0]])) {
 
                     $fullPath = $path . $url;
                 }
@@ -86,9 +86,9 @@ final class Extension extends \Twig_Extension {
      */
     public function getFilters() {
         
-        if (class_exists('Niuware\WebFramework\Helpers\TwigFilters')) {
+        if (class_exists('\App\Helpers\TwigFilters')) {
         
-            $reflectionClass = new \ReflectionClass('Niuware\WebFramework\Helpers\TwigFilters');
+            $reflectionClass = new \ReflectionClass('\App\Helpers\TwigFilters');
 
             $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 

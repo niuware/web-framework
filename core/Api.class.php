@@ -101,7 +101,7 @@ final class Api {
      */
     private function initialize() {
         
-        $this->currentUri = parse_url(filter_input(SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
+        $this->currentUri = parse_url(filter_input(\App\Config\SERVER_ENV_VAR, 'REQUEST_URI', FILTER_SANITIZE_URL));
 
         $func = $this->actionPath($this->currentUri['path']);
         
@@ -109,7 +109,7 @@ final class Api {
         
         if (isset($func[1]) && !empty($func[1]))
         {
-            $this->className = "Niuware\WebFramework\Api\\" . $func[1];
+            $this->className = "App\Api\\" . $func[1];
             $this->methodName = str_replace(['-', '_'], '', $func[2]);
             
             return true;
@@ -239,13 +239,13 @@ final class Api {
 
         $currentPath = $customPath;
 
-        if (BASE_PATH == "/") {
+        if (\App\Config\BASE_PATH == "/") {
 
             $path = substr($currentPath, 1);
 
         } else {
 
-            $path = str_replace('/' . BASE_PATH, '', $currentPath);
+            $path = str_replace('/' . \App\Config\BASE_PATH, '', $currentPath);
         }
 
         return explode('/', $path);

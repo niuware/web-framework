@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <base href="{{ constant('Niuware\\WebFramework\\BASE_URL') }}public/">
+        <base href="{{ constant('App\\Config\\BASE_URL') }}public/">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block metas %}{% endblock %}
         
-        <title>Admin {{ constant('Niuware\\WebFramework\\DEFAULT_TITLE') }} {% if title is defined %}{{ title }}{% endif %}</title>
+        <title>Admin {{ constant('App\\Config\\DEFAULT_TITLE') }} {% if title is defined %}{{ title }}{% endif %}</title>
         
         <link rel="stylesheet" href="styles/default/main.css">
         {% block stylesheets %}{% endblock %}

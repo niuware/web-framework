@@ -70,7 +70,7 @@ final class HttpRequest {
         }
         
         $this->headers['Request-Path'] = $uri;
-        $this->headers['Request-Uri'] = BASE_URL . $uri;
+        $this->headers['Request-Uri'] = \App\Config\BASE_URL . $uri;
     }
     
     /**
