@@ -102,8 +102,8 @@ final class Application {
 
         $this->language = \App\Config\Settings::$languages[$lang];
 
-        define(__NAMESPACE__ . "\BASE_LANG", $this->language['prefix']);
-        define(__NAMESPACE__ . "\DB_LANG", $this->language['db_prefix']);
+        define("App\Config\BASE_LANG", $this->language['prefix']);
+        define("App\Config\DB_LANG", $this->language['db_prefix']);
     }
     
     /**
