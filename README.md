@@ -3,7 +3,7 @@ Niuware WebFramework
 **Niuware WebFramework** is a lightweight and ready to use PHP framework for developing full MVC and MVP web applications using synchronous and asynchronous requests.
 
 ## Requirements
-Niuware WebFramework requires PHP 7.
+Niuware WebFramework requires PHP 5.6+.
 
 ## Installation
 
@@ -11,7 +11,7 @@ Checkout the full documentation in [niuware.github.io](http://niuware.github.io/
 
 ## Author
 
-This application was coded entirely by Erik Lopez.
+This framework was coded entirely by Erik Lopez.
 
 ## License
 
