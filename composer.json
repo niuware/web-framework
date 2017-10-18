@@ -1,5 +1,5 @@
 {
     "require": {
-        "niuware/webframework": ">=v3.0.0"
+        "niuware/webframework": "dev-master"
     }
 }
