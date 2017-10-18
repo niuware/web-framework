@@ -8,7 +8,7 @@
 */
 namespace Niuware\WebFramework;
 
-require_once 'core/Application.class.php';
+require_once 'vendor/autoload.php';
 
 // Create the web application
 $app = Application::getInstance();

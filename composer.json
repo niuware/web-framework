@@ -1,7 +1,5 @@
 {
     "require": {
-        "illuminate/database": "^5.4",
-        "twig/twig" : "^2.3.2",
-        "robmorgan/phinx" : "^0.8.0"
+        "niuware/webframework": ">=v3.0.0"
     }
 }
