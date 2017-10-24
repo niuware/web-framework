@@ -15,7 +15,6 @@ define(__NAMESPACE__ . '\SERVER_ENV_VAR',   \INPUT_SERVER);
 define(__NAMESPACE__ . '\BASE_PATH',        '/');
 define(__NAMESPACE__ . '\BASE_URL',         'http://localhost/');
 define(__NAMESPACE__ . '\BASE_URL_SSL',     'https://localhost/');
-define(__NAMESPACE__ . '\BASE_URL_ADMIN',   'http://localhost/admin/');
 
 // Development and Production
 define(__NAMESPACE__ . '\DEBUG_MODE',           true);          // true|false
@@ -24,7 +23,6 @@ define(__NAMESPACE__ . '\DEFAULT_RENDERER',     'twig');        // twig|php
 
 // General
 define(__NAMESPACE__ . '\HOMEPAGE',             'home');
-define(__NAMESPACE__ . '\HOMEPAGE_ADMIN',       'home');
 define(__NAMESPACE__ . '\DEFAULT_TITLE',        'Niuware WebFramework');
 define(__NAMESPACE__ . '\DEFAULT_DESCRIPTION',  '');
 define(__NAMESPACE__ . '\DEFAULT_KEYWORDS',     '');
