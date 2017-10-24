@@ -9,10 +9,10 @@ final class Routes {
     
     public static $views = [
         'main' => [
-            'home' => ['Home', false]
+            'home' => ['use' => 'Home', 'login' => false]
             ],
         'admin' => [
-            'home' => ['Home']
+            'home' => ['use' => 'Home']
         ]
     ];
 }
