@@ -6,7 +6,7 @@
 * GIT repository at:
 * https://github.com/niuware/web-framework
 */
-namespace Niuware\WebFramework;
+namespace Niuware\WebFramework\Application;
 
 require_once 'vendor/autoload.php';
 
