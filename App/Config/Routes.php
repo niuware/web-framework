@@ -9,9 +9,15 @@ final class Routes {
     
     public static $views = [
         'main' => [
+
             'home' => ['use' => 'Home', 'require' => []]
-            ],
+        ],
+
         'admin' => [
+
+            'login' => ['use' => 'Login@login'],
+            'logout' => ['use' => 'Login@logout'],
+
             'home' => ['use' => 'Home']
         ]
     ];
