@@ -2,12 +2,12 @@
 
 namespace App\Controllers\Admin;
     
-use Niuware\WebFramework\Controller;
-use Niuware\WebFramework\HttpRequest;
+use Niuware\WebFramework\Application\Controller;
+use Niuware\WebFramework\Http\HttpRequest;
 
 final class Home extends Controller {
     
-    public function getHome(HttpRequest $request) {
+    public function getIndex(HttpRequest $request) {
         
         return $this->render();
     }
