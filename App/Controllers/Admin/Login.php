@@ -2,9 +2,9 @@
 
 namespace App\Controllers\Admin;
     
-use Niuware\WebFramework\Controller;
-use Niuware\WebFramework\Request;
-use Niuware\WebFramework\Auth;
+use Niuware\WebFramework\Application\Controller;
+use Niuware\WebFramework\Http\Request;
+use Niuware\WebFramework\Auth\Auth;
 
 final class Login extends Controller {
 
