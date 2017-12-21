@@ -70,13 +70,13 @@ final class Settings {
     static $languages = [
         'default' => [
             'prefix'        => 'en', 
-            'db_prefix'     => 'en', 
+            'db_prefix'     => '', 
             'code'          => 'en_US', 
             'date_format'   => 'm/j/Y'
         ],
         'spanish' => [
             'prefix'        => 'es', 
-            'db_prefix'     => 'es', 
+            'db_prefix'     => 'es_', 
             'code'          => 'es_MX', 
             'date_format'   => 'j/m/Y'
         ]
