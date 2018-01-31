@@ -13,8 +13,7 @@ date_default_timezone_set('UTC');
 // Routing
 define(__NAMESPACE__ . '\SERVER_ENV_VAR',   \INPUT_SERVER);
 define(__NAMESPACE__ . '\BASE_PATH',        '/');
-define(__NAMESPACE__ . '\BASE_URL',         'http://localhost/');
-define(__NAMESPACE__ . '\BASE_URL_SSL',     'https://localhost/');
+define(__NAMESPACE__ . '\BASE_URL',         'https://localhost/');
 
 // Development and Production
 define(__NAMESPACE__ . '\DEBUG_MODE',           true);          // true|false
