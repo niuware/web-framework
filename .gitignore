@@ -1,2 +1,3 @@
 /App/cache/*
 /vendor/*
+/App/Config/Settings.php
