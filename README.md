@@ -5,8 +5,6 @@ Niuware WebFramework
 ### Get the best features of Laravel and Symfony in one unified PHP web framework.
 The framework integrates the Eloquent ORM (well known for its use in Laravel) for implementing database models and Twig (well known for its use in Symfony) for smart template redering.
 
-See more details at [niuware.github.io](http://niuware.github.io/)
-
 ## Requirements
 PHP 7.0+
 
