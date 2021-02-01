@@ -16,7 +16,7 @@ Composer
 2. Run 'composer install'.
 3. Enjoy.
 
-Checkout the full [documentation here](http://niuware.github.io/documentation/)
+Checkout the full [documentation here](https://niuware.github.io/documentation/)
 
 ## Notes
 
